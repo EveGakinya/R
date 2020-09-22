@@ -1,0 +1,153 @@
+---
+title: "ggplot2 visualizations"
+author: "Evelyn Gakinya"
+date: "5/4/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(readr)
+df<- read.csv("C:\\Users\\EVAH\\Desktop\\RSessions\\wafanyikazi.csv",header = TRUE, sep = ",")
+df
+```
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+```
+
+```{r}
+tab1 <- df %>% 
+  group_by(Department) %>% 
+  summarise(Count = n()) %>% 
+  mutate(Perc = round(Count / sum(Count)*100,0))
+tab1
+```
+
+```{r}
+bargraph1 <- ggplot(data = tab1, aes(x = Department, y = Count)) +
+             geom_bar(stat = "identity", fill = "brown") +
+             geom_text(aes(label = Count), hjust = 0.5, vjust = -0.25, size = 5) +
+             theme(plot.title = element_text(face = "bold", hjust = 0.5, size = 14),
+                   axis.title = element_text(face = "italic", size = 12),
+                   axis.text = element_text(size = 12),
+                   axis.line = element_line(size = 1.5, colour = "black"),
+                   panel.background = element_rect(fill = NA))+
+             labs(title = "Distribution of Respondents",
+                  x = "Department",
+                  y = "Frequency")
+bargraph1
+```
+```{r}
+table_1 <- df %>% 
+  group_by(Gender) %>% 
+  summarise(count=n())
+table_1
+```
+
+
+```{r}
+
+
+bargraph2 <- ggplot(data= table_1,aes(x= Gender,y= count))+
+  geom_bar(stat = "identity", fill = "brown")+
+  geom_text(aes(label=count), hjust= 0.5, vjust= -0.3, size = 6)+
+  theme(plot.title = element_text(face="bold", hjust = 0.5, size = 12),
+        axis.title = element_text(face = "italic", size = 12),
+        axis.text = element_text(face = "italic", size = 12))+
+  labs(title = "Gender Distribution", 
+       x= "Gender", 
+       y= "count")
+bargraph2
+```
+
+```{r}
+##practise
+##plotting a graph with 2 variables
+table_2 <- df %>% 
+  group_by(Role, Gender) %>% 
+  summarise(average_income = mean(Income)) %>% 
+  mutate(avg_income= round(average_income,0))
+table_2
+```
+
+```{r}
+##plotting a graph with 2 variables
+
+bargraph3 <- ggplot(data= table_2, aes(x= Role, y = avg_income, fill = Gender))+
+  geom_bar(stat ="identity", position="dodge")+
+    geom_text(aes(label = avg_income), hjust=0.5, vjust= -0.25, size = 3,
+            position = position_dodge(width = 0.9))+
+  theme(plot.title = element_text(face = "bold", size = 12, hjust=0.5),
+        axis.title = element_text(face = "italic", size = 12),
+        axis.text = element_text(size = 12),
+        axis.line = element_line(size = 1.5),
+        plot.subtitle = element_text(hjust = 0.5, size = 10),
+        plot.caption = element_text(face = "bold", size=10))+
+  labs(title = "Distribution of average income on Role", x= "Role",
+       y= "average_income", subtitle = "role, gender and income", 
+       caption = "prepared by Evelyn Gakinya")+
+  scale_fill_manual(values = c("black","purple"))
+bargraph3
+```
+
+```{r}
+table_3 <-df %>% 
+  group_by(Marital_Status, Gender) %>% 
+  summarise(average= mean(Income)) %>% 
+  mutate(round = round(average,0))
+table_3
+
+```
+
+```{r}
+bargraph4 <- ggplot(data=table_3, aes(x = Marital_Status, y = round, fill = Gender))+
+  geom_bar(stat = "identity", position = "dodge")+
+  geom_text(aes(label = round), hjust=0.5, vjust=-0.3, size=3, position = position_dodge(width = 0.9))+
+  theme(plot.title = element_text(face = "bold", hjust = 0.5, colour = "red"),
+        axis.title = element_text(face = "italic", size = 10, colour = "black"),
+        axis.text = element_text(face = "plain", size = 10, colour = "red"),
+        axis.line = element_line(size = 1.5, colour = "green"),
+        plot.subtitle = element_text(face = "italic", hjust = 0.5, colour = "brown"),
+        plot.caption = element_text(face = "italic", size = 10, colour = "purple"))+
+  scale_fill_manual(values = c("black","yellow"))+
+  labs(title =" Marital status, gender and income", x = "marital status",
+       y = "average", subtitle = "2 variables",
+       caption = "prepared by Evelyn Gakinya")
+bargraph4
+```
+
+```{r}
+##one variable
+table_4 <- df %>% 
+  group_by(Role) %>% 
+  summarise(count = n())
+table_4
+
+bargraph5 <- ggplot(data = table_4, aes(x = Role, y= count))+
+  geom_bar(stat = "identity", fill = "purple")+
+  geom_text( aes(label= Role), hjust = 0.5, vjust= -0.25)+
+  theme(plot.title = element_text(face = "bold", hjust = 0.5, colour = "black",
+                                  size = 12),
+        axis.title = element_text(face = "italic", size = 10),
+        axis.text = element_text(face = "italic", size = 10),
+        axis.line = element_line( size = 1.5, color = "black"),
+        plot.subtitle = element_text(face = "plain", size = 10, colour = "brown", hjust = 0.5),
+        plot.caption = element_text(face = "bold", colour = "red", size = 11))+
+  scale_fill_manual(values = c("red","black"))+
+  labs(title=" The number of people per Role",
+       subtitle = "count role",
+       x= "Role",
+       y= "count",
+       caption = "prepared Evelyn")
+bargraph5
+```
+
+```{r}
+
+```
+
