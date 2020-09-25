@@ -1,0 +1,137 @@
+---
+title: "Data_manipulation1"
+author: "Evelyn Gakinya"
+date: "9/25/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      message=FALSE,warning=FALSE,
+                      fig.width = 8, fig.height = 6)
+```
+```{r}
+library(readr)
+df<-read.csv("C:\\Users\\EVAH\\Desktop\\RSessions\\wafanyikazi.csv",header = TRUE, sep = ",")
+df
+```
+```{r}
+library(tidyverse)
+```
+##generating a tabular table for average income grouped by gender
+```{r}
+tab <- df %>% 
+      group_by(Gender) %>% 
+      summarise(Average_income = mean(Income, na.rm = T))
+tab
+```
+##generating a tabular table for minimum age,maximum age and average income grouped by Gender
+```{r}
+tab1 <- df %>% 
+        group_by(Gender) %>% 
+        summarise(min_age = min(Age), max_age = max(Age), average_income = mean(Income))
+tab1
+```
+###Grouping using 2 variables
+##generating a tabular table for minimum age,maximum age and average income grouped by Gender ##and Department.
+```{r}
+tab2 <- df %>% 
+        group_by(Gender,Department) %>% 
+        summarise(min_age = min(Age), max_age = max(Age), average_income = mean(Income))
+tab2
+```
+
+```{r}
+tab5 <- df %>% 
+        group_by(Marital_Status) %>% 
+        summarise(mean.Income = mean(Income))
+```
+
+##generating a new variable ,converting the variable into percentage then rounding off to 0dp
+```{r}
+tab3 <- df %>% 
+        group_by(Role) %>% 
+        summarise(no.of.emp = n()) %>% 
+        mutate(percent = (no.of.emp/sum(no.of.emp)) * 100) %>% 
+        mutate(percent = round((no.of.emp/sum(no.of.emp)) * 100, 0))
+tab3
+```
+##generating a new tabular table with increasing gender and  count
+```{r}
+tab4 <- df %>% 
+        group_by(Gender, Role) %>% 
+        summarise(count = n()) %>% 
+        arrange(Gender,count)
+tab4
+```
+##rename()
+##rename(new name = old name)
+##when renaming several variables: rename(new1 = old1,new2 = old2)
+```{r}
+new_varnames <- df %>% 
+                rename(Umri = Age, Sex = Gender, Dept = Department)
+new_varnames
+```
+##bind_cols() needs respondents to match across the different datasets.
+#inner_join()
+#right_join()
+#left_join()
+# Generate two datasets, 
+#1. df1: All variables containing a letter 'e' and Sid
+
+```{r}
+df1 <- df %>% 
+       select(Sid, contains("e"))
+df1
+```
+#2. df2: Contains the rest of the variables including Sid 
+```{r}
+df2 <- df %>% 
+       select(-contains("e"))
+df2
+```
+##merging df1 and df2 using inner_join
+```{r}
+merged_df1 <- inner_join(df1, df2, by = "Sid")
+merged_df1
+```
+##merging df1 and df2 using left_join
+```{r}
+merged_df2 <- left_join(df1, df2, by = "Sid")
+merged_df2
+```
+``
+##merging df1 and df2 using right_join
+```{r}
+merged_df3 <- right_join(df1,df2, by = "Sid")
+merged_df3
+```
+#### Generate a dataset of females
+```{r}
+df_females <- df %>% 
+              filter(Gender == "Female")
+df_females
+```
+# Generate a dataset that merges females data and the original data
+#inner_join
+```{r}
+data <- inner_join(df_females, df)
+data
+```
+#leftjoin
+
+```{r}
+data1 <- left_join(df_females, df)
+data1
+```
+#right_join
+```{r}
+data2 <- right_join(df_females,df)
+data2
+```
+##full_join
+```{r}
+data3 <- full_join(df_females, df)
+data3
+```
+
