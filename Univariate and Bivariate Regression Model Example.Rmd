@@ -1,0 +1,152 @@
+---
+title: "Univariate and Bivariate Regression Models for the CMA data 2011-2017"
+author: "Evelyn Gakinya"
+date: "11/2/2020"
+output: html_document
+---
+The data analysis has been done using R software version 3.4.1, report automatically generated using R markdown software
+The first step is to load the data set in R and explore various variables.
+For ease of plotting the variable turnover has been divided by 1000 to convert it 
+to "Billions". 
+The head function displays the first 6 rows of the data set.
+The summary function displays the nature of the data set.
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+data<-read.csv("C:\\Users\\EVAH\\Desktop\\RSessions\\CMA data\\CMA_data.csv", header=TRUE, sep=",")
+attach(data)
+head(data)
+names(data)##"year","month","inflation","turnover","cma_income","turnover_in.billions"
+summary(data)
+```
+##Checking the distribution of variable inflation using a histogram is shown below.
+```{r}
+qplot(inflation, data=data,
+      geom = "histogram", binwidth=1)+
+	labs(title="Histogram of Inflation")+
+	labs(x="Inflation rate in %")+
+	labs(y="frequency")+
+	scale_y_continuous(minor_breaks=NULL)+
+	scale_x_continuous(breaks=c(1:20),minor_breaks=NULL)+
+  geom_vline(xintercept = mean(data$inflation), show.legend = TRUE, col="blue")+
+  geom_vline(xintercept = median(data$inflation), show.legend = TRUE, col="red")
+```
+The histogram will allow us to see a pattern in the distribution of inflation(%). 
+The red and blue line shows the mean and median values of inflation.
+
+##Checking the distribution of variable CMA income in millions using a histogram is shown below.
+```{r}
+qplot(cma_income, data=data,
+      geom = "histogram", binwidth=1)+
+	labs(title="Histogram of CMA income in Millions(Kshs)")+
+	labs(x="CMA income in millions(Kshs)")+
+	labs(y="Frequency")+
+	scale_y_continuous(minor_breaks=NULL)+
+	scale_x_continuous(breaks=c(5,10,15,20,25,
+	                            30,35,40,45,50,55,60,65,
+	                            70,75,80,85,90,95,100),minor_breaks=NULL)+
+  geom_vline(xintercept = mean(data$cma_income), show.legend = TRUE, col="blue")+
+  geom_vline(xintercept = median(data$cma_income), show.legend = TRUE, col="red")
+```
+The histogram will allow us to see a pattern in the distribution of CMA income in millions
+. The red and blue line shows the mean and median values of CMA income. 
+
+##Checking the distribution of variable turnover in billions of Kshs using a histogram is shown below.
+```{r}
+qplot(turnover_in.billions, data=data,
+      geom = "histogram", binwidth=1)+
+	labs(title="Histogram of Total market Turnover in Billions(Kshs)")+
+	labs(x="Total market Turnover in Billions(Kshs)")+
+	labs(y="Frequency")+
+	scale_y_continuous(minor_breaks=NULL)+
+	scale_x_continuous(breaks=c(25,30,35,40,45,50,55,60,65,
+	                            70,75,80,85,90,95,100,105,110),minor_breaks=NULL)+
+  geom_vline(xintercept = mean(data$turnover_in.billions), show.legend =TRUE, col="blue")+
+ geom_vline(xintercept = median(data$turnover_in.billions), show.legend = TRUE, col="red")
+
+```
+The histogram will allow us to see a pattern in the distribution of turnover in Billions.
+The red and blue line shows the mean and median values of turnover.
+
+##We then plot a scatter plot of CMA income versus inflation to see the relationship 
+between the two variables
+```{r}
+qplot(inflation, cma_income, data=data,
+	 main="Relationship between CMA income(in millions Kshs) and inflation(in %)",
+	ylab="CMA income in Kshs (Millions)",
+	xlab="Inflation rate in %")+
+	scale_y_continuous(breaks=c(5,10,15,20,25,
+	                            30,35,40,45,50,55,60,65,
+	                            70,75,80,85,90,95,100), minor_breaks=NULL)+
+	scale_x_continuous(breaks=c(1:20),minor_breaks=NULL)
+```
+Each point in the scatter plot above shows how income changes with the inflation. And we see that the higher the inflation the lower the income.
+
+Fitting a linear regression model, will explain this relationship. The model can be stated as follows
+CMA income=b0+b1*inflation rate
+
+where b0 is the intercept and b1 is the slope. The intercept is the expected income for the average inflation rate while average increase in CMA income associated with a unit increase in the inflation rate.
+ 
+using the least square approach we fit the first model without the intercept shown below
+```{r}
+set.seed(123)
+model1<-lm(cma_income~inflation-1)
+summary(model1)
+```
+
+using the least square approach we fit the first model with the intercept shown below
+
+```{r}
+set.seed(123)
+model2<-lm(cma_income~inflation)
+summary(model2)
+```
+fitting a line of best fit to the points is shown below
+```{r}
+qplot(inflation, cma_income, data=data,
+	 main="Relationship between CMA income(in millions Kshs) and inflation(in %)",
+	ylab="CMA income in Kshs (Millions)",
+	xlab="Inflation rate in %")+
+  stat_smooth(method = lm, col="green")+
+	scale_y_continuous(breaks=c(5,10,15,20,25,
+	                            30,35,40,45,50,55,60,65,
+	                            70,75,80,85,90,95,100), minor_breaks=NULL)+
+	scale_x_continuous(breaks=c(1:20),minor_breaks=NULL)
+```
+ From the above graph, we are not able to tell clearly the estimated income when we consider the average rate of inflation accross the data, therefore no meaningful interpretation of the data.from the graph 2 above, our interpretation could be something like "for 0 inflation, then income to the CMA would be almost 50 million." To be able to achieve this meaningful interpretation of our data, we create a new variable called innfat_mean which centres the value of variable inflation on its mean.This can be shown in the graph 3 below
+```{r}
+set.seed(123)
+innfat_mean=scale(data$inflation, center = TRUE, scale=FALSE)
+model3<-lm(cma_income~innfat_mean)
+summary(model3)
+```
+```{r}
+qplot(innfat_mean, cma_income, data=data,
+	 main="Relationship between CMA income(in millions Kshs) and inflation(in %)",
+	ylab="CMA income in Kshs (Millions)",
+	xlab="Inflation rate in %")+
+  stat_smooth(method = lm, col="green")+
+	scale_y_continuous(breaks=c(5,10,15,20,25,
+	                            30,35,40,45,50,55,60,65,
+	                            70,75,80,85,90,95,100), minor_breaks=NULL)
+```
+From the graph 3 we can tell that estimated income to the CMA is 38,000,000 Kshs on average inflation.
+
+##Interpreting tho model2(model with intercept) and the scatter plot of Income versus inflation
+1.The p-value of 5.696e-06 i very significant since it is very small compared to the 0.05 level showing that our model is statistically significant and not by chance.
+2.The relationship between the 2 variables doesnt follow a straight line indicating a non-linear relationship between income and inflation rate.
+3.The R-squared value of  0.2386 is very small and indicates that the proprtion of CMA income in millions explained by inflation is 23.86%. This means there are other factors explaining the other 66% income for the CMA. Therefore our model explains a very small variance.
+4.Looking at the residual standard error of 12.57, means that the CMA income that will deviate from the true regression line for any given inflation will be different by 12.57.
+This is a small number meaning inflation can easily predict outcome of the CMA in  millions.
+5. The CMA income is 38,000,000 and the residual standard error is 12.57, then the average percentage error for any given point is about 0/000% a very small error rate
+
+##plotting the residuals versus the fitted
+```{r}
+plot(model3,which=1)
+```
+The graph shows model residuals(average amount that the response will deviate from the true regresion line) plotted against fitted values(model predicted values for the CMA income). from the graph 4 above, we can see some outliers 35,42,48(in million Kshs) indicating that a non-linear pattern is present in the relationship.
+
+
