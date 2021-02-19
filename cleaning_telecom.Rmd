@@ -1,0 +1,176 @@
+---
+title: "Cleaning Data"
+author: "Evelyn Gakinya"
+date: "5/4/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+##REading the data set
+
+df<-read.csv("C:\\Users\\EVAH\\Desktop\\RSessions\\cleaning data\\telecom.csv")
+df
+```
+
+```{r}
+## Using Glimpse function to look at the variable names and types
+library(dplyr)
+glimpse(df)
+```
+
+```{r}
+##We can see that there’s 5 variables.
+##customerID:chr which stands for character, another name for a string
+##MonthlyCharges:dbl which stands for double, which is a numeric type
+##TotalCharges:chr character
+##PaymentMethod:chr character
+##Churn:chrcharacter
+```
+
+```{r}
+
+```
+```{r}
+##Using Filter
+df1 <- df %>% 
+      filter(Churn == "yes")
+df1
+```
+
+```{r}
+
+df2<-df %>% 
+     select(customerID,TotalCharges)
+df2
+```
+```{r}
+
+
+df3<- df %>% 
+      filter(Churn =="yes")%>% 
+      select(customerID,TotalCharges)
+df3
+```
+```{r}
+
+df$MonthlyCharges
+is.na(df$MonthlyCharges)
+```
+
+```{r}
+##We can use the distinct function to look at the distinct values that show up ##in the MonthlyCharges column
+df4 <- df %>% 
+       distinct(MonthlyCharges)
+df4
+```
+
+```{r}
+#a quick count of the distinct values we can use the summarisefunction.
+
+tab <- df %>% 
+       summarise(n = n_distinct(MonthlyCharges))
+tab
+```
+```{r}
+##Counting the missing values
+tab1<- df %>% 
+       summarise(n_missing = sum(is.na(MonthlyCharges)))
+tab1
+
+```
+
+```{r}
+## counting unique, missing, and median values
+tab2 <- df %>% 
+        summarise(n = n_distinct(MonthlyCharges),
+                  n_missing = sum(is.na(MonthlyCharges)),
+                  median_monthly = median(MonthlyCharges,na.rm = TRUE))
+tab2
+```
+
+```{r}
+##replacing missing values with median using mutate
+# mutate missing values
+dfnew <- df %>% 
+         mutate(MonthlyCharges
+                =replace(MonthlyCharges,
+                         is.na(MonthlyCharges),
+                         median(MonthlyCharges, na.rm = TRUE)))
+dfnew
+```
+
+```{r}
+##Non standard missing values na, n/A
+##looking at the missing values
+dfnew$TotalCharges
+is.na(dfnew$TotalCharges)
+```
+
+```{r}
+
+#counting the missing values
+tab5 <- dfnew %>% 
+        summarise(n = sum(is.na(TotalCharges)))
+tab5
+```
+
+```{r}
+
+#replacing with a standard missing type
+dfnew <- dfnew %>% 
+         mutate(TotalCharges = replace(TotalCharges, TotalCharges == "na", NA)) %>% 
+         mutate(TotalCharges = replace(TotalCharges, TotalCharges == "N/A", NA))
+dfnew
+```
+```{r}
+## checking the total missing values in variable Total charges
+tab6 <- dfnew %>% 
+        summarise(n_missing = sum(is.na(TotalCharges)))
+tab6
+```
+```{r}
+### Changing column values from character to numeric type
+dfnew$TotalCharges <- as.numeric(dfnew$TotalCharges)
+glimpse(dfnew$TotalCharges)
+```
+
+```{r}
+###replacing missing values with median
+dfnew <- dfnew %>% 
+         mutate(TotalCharges = replace(TotalCharges,
+                                       is.na(TotalCharges),
+                                       median(TotalCharges, na.rm = TRUE)))
+dfnew
+```
+
+```{r}
+##easier way of changing all missing values is
+dftotal <- df
+dftotal
+##changing Totalcharges into Numeric
+dftotal$TotalCharges <- as.numeric(dftotal$TotalCharges)
+glimpse(dftotal$TotalCharges)
+```
+```{r}
+##missing values in Payment method
+df$PaymentMethod
+is.na(df$PaymentMethod)
+```
+```{r}
+##Replacing missing values with NA
+dfnew <- dfnew %>% 
+         mutate(PaymentMethod = replace(PaymentMethod, PaymentMethod == "", NA )) %>% 
+         mutate(PaymentMethod = replace(PaymentMethod, PaymentMethod == "--",NA))
+dfnew
+```
+```{r}
+##Replacing missing values NA with Unavailavle
+dfnew <- dfnew %>% 
+         mutate(PaymentMethod = replace(PaymentMethod, is.na(PaymentMethod), "Unavailable"))
+dfnew
+```
+
