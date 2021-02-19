@@ -1,0 +1,2160 @@
+---
+title: "Toursim data analysis"
+author: "Evelyn Gakinya"
+output: html_document
+---
+```{r}
+require(Hmisc)
+data17<-spss.get("C:\\Users\\EVAH\\Desktop\\cod\\datain2019.sav")  ##("C:\\Users\\EVAH\\Desktop\\cod\\datain2017.sav")
+attach(data17)
+head(data17)
+names(data17)
+#COUNTY.OF.RESID.2
+#options(max.print = 6000)
+#ls()
+#rm(list = ls())
+```
+Show in New WindowClear OutputExpand/Collapse Output
+ [1] "SERIAL.NO"                        "DATE.OF.INTERVIEW"                "POINT.OF.SURVEY"                  "COUNTY.OF.RESID"                
+ [5] "COUNTY.OF.RESID.2"                "NATIONALITY.RESPODENT"            "DATE.OF.ARRIVAL"                  "NUMBER.PERSON.TRAVEL.WITH.YOV"  
+ [9] "IF.WITH.FAMILY.GIVE.THE.NUM"      "FIRST.VISIT.TO.KENYA"             "IF.NO.INDICATE.NUM.PREVIOUS.VISI" "HIGHEST.EDUCLEVEL"              
+[13] "OCCUPATION.RESP"                  "AGE.RESPODENT"                    "GENDER.RESPODENT"                 "MODE.OF.TRAVEL"                 
+[17] "TYPES.OF.FLIGHT"                  "NUMB.NIGHTS.SPENT.IN.COUNTRY"     "ONE.OR.MORE"                      "MAIN.PURPOSE.FOR.YOUR.VISIT"    
+[21] "WHAT.ACTIVITIES.TAKE.KENYA"       "INFORMATION.CONCERNING.EXP.REFES" "WHOLE.FAM.GROUP.SIZE"             "NAME.OF.AIRLINE.T.1"            
+[25] "NAME.OF.AIRLINE.T.2"              "NAME.OF.AIRLINE.T.3"              "NAME.OF.AIRLINE.T.4"              "Q14.ARE.YOU.TRAVELLING.ON.A.PAC"
+[29] "Q15A.AMOUNT.PAID.FOR.THE.PACKAG"  "Q15B.NUMBER.OF.NIGHTS.SPENT.IN"   "Q15C.ADDITIONAL.EXPENDITURE.IND"  "Q16.DID.THE.PACKAGE.TOUR.INCLUD"
+[33] "Q16B"                             "ACCOMODATION"                     "FOOD.AND.DRINKS"                  "ROAD.TRANSPORT"                 
+[37] "AIR.TRANSPORT"                    "RAIL.TRANSPORT"                   "WATER.TRANSPORT"                  "RECREATION.AND.AMUSEMENTS"      
+[41] "HANDICRAFTS"                      "SIGHTSEEING"                      "MEDICAL"                          "OTHERS"                         
+[45] "TOTAL"                            "DID.YOU.USE.A.CREDIT.CARD"        "WHICH.CREDIT.CARD.S.DID.YOU.USF"  "HOW.LIKELY.VISIT.KENYA"         
+[49] "Q20.ANY.COMMENT"                  "ACT.BUSINES"                      "ACT.FRIENS"                       "ACT.CULTURE"                    
+[53] "ACT.SPORT"                        "ACT.SIGHTSEEING"                  "ACT.NATIONALPARK"                 "ACT.MUSEUM"                     
+[57] "ACT.HERITAGE"                     "ACT.BEACHES"                      "ACT.SHOPPING"                     "ACT.OTHER"                      
+[61] "PAC.INTFARE"                      "PAC.LOCALTRANSPORT"               "PAC.ACCOMODATION"                 "PAC.MEALS"                      
+[65] "PAC.DRINKS"                       "PAC.NATIONALPARKS"                "PAC.MUSEUMS"                      "PAC.CULTURA.EVENTS"             
+[69] "PAC.SIGHTSEEING"                  "PAC.EVENT"                        "PAC.EDUCATIONAL.TOURS"            "PAC.OTHERS"                     
+[73] "CARD.AMERICAN"                    "CARD.VISA"                        "CARD.MASTER"                      "CARD.OTHERS" 
+
+```{r}
+#dist by border points
+t1<-table(POINT.OF.SURVEY)
+t1
+t_1<-cbind(t1, prop.table(t1)*100)
+t_1
+t1_<-addmargins(t_1,1)
+t1_
+d<-round(t1_,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+t2<-table(COUNTY.OF.RESID.2)
+t2
+t_2<-cbind(t2,prop.table(t2)*100)
+t_2
+t2_<-addmargins(t_2,1)
+t2_
+d<-round(t2_,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+t3<-table(NATIONALITY.RESPODENT)
+t3
+t_3<-cbind(t3,prop.table(t3)*100)
+t_3
+t3_<-addmargins(t_3,1)
+t3_
+d<-round(t3_,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+levels(NUMBER.PERSON.TRAVEL.WITH.YOV)
+t4<-table(NUMBER.PERSON.TRAVEL.WITH.YOV)
+t4
+t_4<-cbind(t4,prop.table(t4)*100)
+t_4
+t4_<-addmargins(t_4,1)
+t4_
+d<-round(t4_,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+
+da1<-subset(data17, NUMBER.PERSON.TRAVEL.WITH.YOV=="Alone" )
+numbn<-as.numeric(da1$NUMBER.PERSON.TRAVEL.WITH.YOV)
+num_alone<-length(numbn)
+num_alone
+
+da2<-subset(data17, NUMBER.PERSON.TRAVEL.WITH.YOV=="Couple")
+num<-as.numeric(da2$NUMBER.PERSON.TRAVEL.WITH.YOV)
+num_couple<-length(num)*2  ###since it is a couple
+num_couple
+
+levels(NUMBER.PERSON.TRAVEL.WITH.YOV)  ### "Alone"  "Couple" "Family (give number)"  "In a group (give number)"
+
+dat1<-subset(data17, NUMBER.PERSON.TRAVEL.WITH.YOV=="Family (give number)" )
+dat_1<-data.frame(dat1$NUMBER.PERSON.TRAVEL.WITH.YOV, dat1$IF.WITH.FAMILY.GIVE.THE.NUM)
+colnames(dat_1) <- c("travel", "number")
+num_fam<-sum(dat_1$number)
+num_fam
+
+dat2<-subset(data17, NUMBER.PERSON.TRAVEL.WITH.YOV=="In a group (give number)")
+dat_2<-data.frame(dat2$NUMBER.PERSON.TRAVEL.WITH.YOV, dat2$IF.WITH.FAMILY.GIVE.THE.NUM)
+colnames(dat_2) <- c("travel", "number")
+num_grp<-sum(dat_2$number) 
+num_grp
+
+trav_t<-c(num_alone,num_couple,num_fam,num_grp)
+trav_t
+trav_n<-c("Alone","Couple","Family","In a group")
+trav_n
+
+t5<-table(trav_t)
+t5
+k<-prop.table(trav_t)*100
+k
+per<-round(k,2)
+d<-cbind(trav_n,trav_t,per)
+d
+
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=FALSE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+levels(FIRST.VISIT.TO.KENYA)  ##"YES" ,"NO (if NO ,indicate number of previous visits" ,"Born in Kenya" 
+t6<-table(FIRST.VISIT.TO.KENYA)
+t6_<-cbind(t6,prop.table(t6)*100)
+t6_
+d<-addmargins(t6_,1)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+#COUNTY.OF.RESID.2
+t7<-table(COUNTY.OF.RESID.2)
+t7_<-cbind(t7, prop.table(t7)*100)
+t7<-addmargins(t7_,1)
+#t7
+d<-round(t7,2)
+#d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+#education and gender
+#"HIGHEST.EDUCLEVEL" "GENDER.RESPODENT"
+t8<-table(HIGHEST.EDUCLEVEL,GENDER.RESPODENT)
+#t8
+t8_<-cbind(t8, prop.table(t8)*100)
+#t8_
+t_8<-addmargins(t8_,1)
+#t_8
+d<-round(t_8,2)
+#d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+#occupation by gender
+#OCCUPATION.RESP
+t9<-table(OCCUPATION.RESP,GENDER.RESPODENT)
+#t9
+t9_<-cbind(t9, prop.table(t9)*100)
+#t9_
+d<-round(t9_,2)
+#d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+tA<-table(NATIONALITY.RESPODENT,GENDER.RESPODENT)
+tA
+t_A<-cbind(tA,prop.table(tA)*100)
+t_A
+tA_<-addmargins(t_A,1)
+d<-round(tA_,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+#levels(COUNTY.OF.RESID.2) ##"Kenya" ,"Uganda" , "Tanzania" ,"Rwanda" ,"Burundi" ,"South Sudan"
+dat2<-subset(data17, COUNTY.OF.RESID.2=="Uganda" )
+datax<-data.frame(dat2$COUNTY.OF.RESID.2, dat2$AGE.RESPODENT)
+g<-mean(datax$dat2.AGE.RESPODENT, na.rm = TRUE)
+g
+
+dat21<-subset(data17, COUNTY.OF.RESID.2=="Tanzania")
+datax1<-data.frame(dat21$COUNTY.OF.RESID.2, dat21$AGE.RESPODENT)
+g1<-mean(datax1$dat21.AGE.RESPODENT, na.rm = TRUE)
+g1
+
+dat22<-subset(data17, COUNTY.OF.RESID.2=="Rwanda")
+datax2<-data.frame(dat22$COUNTY.OF.RESID.2, dat22$AGE.RESPODENT)
+g2<-mean(datax2$dat22.AGE.RESPODENT, na.rm = TRUE)
+g2
+
+dat23<-subset(data17, COUNTY.OF.RESID.2=="Burundi")
+datax3<-data.frame(dat23$COUNTY.OF.RESID.2, dat23$AGE.RESPODENT)
+g3<-mean(datax3$dat23.AGE.RESPODENT, na.rm = TRUE)
+g3
+
+dat24<-subset(data17, COUNTY.OF.RESID.2=="South Sudan")
+datax4<-data.frame(dat24$COUNTY.OF.RESID.2, dat24$AGE.RESPODENT)
+g4<-mean(datax4$dat24.AGE.RESPODENT, na.rm = TRUE)
+g4
+age<-c(g,g1,g2,g3,g4)
+age_1<-round(age,2)
+age_1
+age_c<-c("Uganda" , "Tanzania" ,"Rwanda" ,"Burundi" ,"South Sudan")
+d<-cbind(age_c,age_1)
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+#mode travel
+levels(MODE.OF.TRAVEL)
+tB<-table(MODE.OF.TRAVEL)
+tB
+tb_<-cbind(tB, prop.table(tB)*100)
+tb_
+f<-addmargins(tb_,1)
+f
+d<-round(f,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+#levels(TYPES.OF.FLIGHT)  ##"Charter"   "Scheduled"
+dat3<-subset(data17, TYPES.OF.FLIGHT=="Charter")
+lenth_chart<-length(dat3$TYPES.OF.FLIGHT)
+#lenth_chart
+dat4<-subset(data17, TYPES.OF.FLIGHT=="Scheduled")
+lenth_sche<-length(dat4$TYPES.OF.FLIGHT)
+lenth_sche
+typ<-cbind(lenth_chart,lenth_sche)
+typ
+tC<-table(typ)
+tC
+t<-prop.table(tC)*100
+t
+tc_<-cbind(tC, prop.table(tC)*100)
+tc_
+d<-round(tc_,2)
+#d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+#NAME.OF.AIRLINE.T.1
+tD<-table(NAME.OF.AIRLINE.T.1)
+tD_<-cbind(tD, prop.table(tD)*100)
+tD_
+t_D<-addmargins(tD_,1)
+t_D
+d<-round(t_D,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+#mean nights
+#levels(NUMB.NIGHTS.SPENT.IN.COUNTRY) ##"None(on transit to/from other countries)" "None (just visiting your country for 1 day)" "One or more nights(state number of nights)"
+#("Uganda" , "Tanzania" ,"Rwanda" ,"Burundi" ,"South Sudan")
+Q15B.NUMBER.OF.NIGHTS.SPENT.IN
+dat5<-subset(data17, COUNTY.OF.RESID.2=="Uganda")
+dat5$Q15B.NUMBER.OF.NIGHTS.SPENT.IN
+ug_nig<-mean(dat5$Q15B.NUMBER.OF.NIGHTS.SPENT.IN, na.rm = TRUE)
+#ug_nig
+
+dat6<-subset(data17, COUNTY.OF.RESID.2=="Tanzania")
+tz_nig<-mean(dat6$Q15B.NUMBER.OF.NIGHTS.SPENT.IN, na.rm = TRUE)
+#tz_nig
+
+dat7<-subset(data17, COUNTY.OF.RESID.2=="Rwanda")
+rw_nig<-mean(dat7$Q15B.NUMBER.OF.NIGHTS.SPENT.IN, na.rm = TRUE)
+#rw_nig
+
+dat8<-subset(data17, COUNTY.OF.RESID.2=="Burundi")
+br_nig<-mean(dat8$Q15B.NUMBER.OF.NIGHTS.SPENT.IN, na.rm = TRUE)
+#br_nig
+
+dat9<-subset(data17, COUNTY.OF.RESID.2=="South Sudan")
+ss_nig<-mean(dat9$Q15B.NUMBER.OF.NIGHTS.SPENT.IN, na.rm = TRUE)
+#ss_nig
+
+nit_cou<-c(ug_nig,tz_nig,rw_nig,br_nig,ss_nig)
+#nit_cou
+dr<-round(nit_cou,2)
+coun<-c("Uganda" , "Tanzania" ,"Rwanda" ,"Burundi" ,"South Sudan")
+d<-cbind(coun,dr)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+#main purpose visit
+levels(MAIN.PURPOSE.FOR.YOUR.VISIT)
+dD<-table(MAIN.PURPOSE.FOR.YOUR.VISIT,GENDER.RESPODENT)
+dD
+d_D<-cbind(dD, prop.table(dD)*100)
+d_D
+d<-round(d_D,2)
+d
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+ "ACT.BUSINES"                      "ACT.FRIENS"                       "ACT.CULTURE"                    
+[53] "ACT.SPORT"                        "ACT.SIGHTSEEING"                  "ACT.NATIONALPARK"                 "ACT.MUSEUM"                     
+[57] "ACT.HERITAGE"                     "ACT.BEACHES"                      "ACT.SHOPPING"                     "ACT.OTHER" 
+
+```{r}
+#act business
+da1<-subset(data17, ACT.BUSINES=="yes")
+#da1
+
+dE<-table(da1$ACT.BUSINES,da1$GENDER.RESPODENT)
+d_E<-cbind(dE,prop.table(dE)*100)
+dE_<-round(d_E,2)
+dE_
+
+#ACT.VISIT.FRIENDS
+da2<-subset(data17, ACT.FRIENS=="yes")
+dF<-table(da2$ACT.FRIENS,da2$GENDER.RESPODENT)
+d_F<-cbind(dF,prop.table(dF)*100)
+dF_<-round(d_F,2)
+dF_
+
+#ACT.CULTURE.EVENTS
+da3<-subset(data17, ACT.CULTURE=="yes")
+dG<-table(da3$ACT.CULTURE,da3$GENDER.RESPODENT)
+d_G<-cbind(dG,prop.table(dG)*100)
+dG_<-round(d_G,2)
+dG_
+
+#ACT.SPORT
+da4<-subset(data17, ACT.SPORT=="yes")
+dH<-table(da4$ACT.SPORT, da4$GENDER.RESPODENT)
+d_H<-cbind(dH, prop.table(dH)*100)
+dH_<-round(d_H,2)
+dH_
+#ACT.SIGHT.SEEING
+da5<-subset(data17, ACT.SIGHTSEEING=="yes")
+dJ<-table(da5$ACT.SIGHTSEEING, da5$GENDER.RESPODENT)
+d_J<-cbind(dJ, prop.table(dJ)*100)
+dJ_<-round(d_J,2)
+dJ_
+
+#ACT.NATIONAL.PARKS
+da6<-subset(data17, ACT.NATIONALPARK=="yes")
+dK<-table(da6$ACT.NATIONALPARK, da6$GENDER.RESPODENT)
+d_K<-cbind(dK, prop.table(dK)*100)
+dK_<-round(d_K,2)
+dK_
+
+#ACT.MUSEUMS
+da7<-subset(data17, ACT.MUSEUM=="yes")
+dL<-table(da7$ACT.MUSEUM, da7$GENDER.RESPODENT)
+d_L<-cbind(dL, prop.table(dL)*100)
+dL_<-round(d_L,2)
+dL_
+
+#ACT.HERITAGE
+da8<-subset(data17, ACT.HERITAGE=="yes")
+dM<-table(da8$ACT.HERITAGE, da8$GENDER.RESPODENT)
+d_M<-cbind(dM, prop.table(dM)*100)
+dM_<-round(d_M,2)
+dM_
+
+#ACT.BEACHES
+da9<-subset(data17, ACT.BEACHES=="yes")
+dN<-table(da9$ACT.BEACHES, da9$GENDER.RESPODENT)
+d_N<-cbind(dN, prop.table(dN)*100)
+dN_<-round(d_N,2)
+dN_
+#ACT.SHOPPING
+da10<-subset(data17, ACT.SHOPPING=="yes")
+dP<-table(da10$ACT.SHOPPING, da10$GENDER.RESPODENT)
+d_P<-cbind(dP, prop.table(dM)*100)
+dP_<-round(d_P,2)
+dP_
+
+#ACT.OTHER
+da11<-subset(data17, ACT.OTHER=="yes")
+dQ<-table(da11$ACT.OTHER, da11$GENDER.RESPODENT)
+d_Q<-cbind(dQ, prop.table(dQ)*100)
+dQ_<-round(d_Q,2)
+dQ_
+
+
+name_act<-c("act business","ACT.VISIT.FRIENDS","ACT.CULTURE.EVENTS",
+            "ACT.SPORT","ACT.SIGHT.SEEING","ACT.NATIONAL.PARKS",
+            "ACT.MUSEUMS","ACT.HERITAGE","ACT.BEACHES",
+            "ACT.SHOPPING","ACT.OTHER")
+name_act
+perc_act<-c(dE_,dF_,dG_,dH_,dJ_,dK_,dL_,dM_,dN_,dP_,dQ_)
+perc_act<-d
+d<-data.frame(name_act,perc_act)
+d
+
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+Q14.ARE.YOU.TRAVELLING.ON.A.PAC
+levels(Q14.ARE.YOU.TRAVELLING.ON.A.PAC)
+tF<-table(Q14.ARE.YOU.TRAVELLING.ON.A.PAC)
+tF
+t_F<-cbind(tF, prop.table(tF)*100)
+t_F
+d
+d<-round(t_F,2)
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+
+```
+```{r}
+#country of residence type of tour
+daaat1<-subset(data17, COUNTY.OF.RESID.2=="Uganda")
+daaat1$COUNTY.OF.RESID.2
+count_tour<-data.frame(daaat1$COUNTY.OF.RESID.2,daaat1$Q14.ARE.YOU.TRAVELLING.ON.A.PAC,daaat1$Q15A.AMOUNT.PAID.FOR.THE.PACKAG,daaat1$ONE.OR.MORE)
+head(count_tour)
+names(count_tour)
+daaat1$Q14.ARE.YOU.TRAVELLING.ON.A.PAC
+#setwd("C:/Users/user/Desktop/cod")
+#write.csv(count_tour, file="C:/Users/user/Desktop/cod/count_tour.csv")
+count_yes<-subset(count_tour, count_tour$daaat1.Q14.ARE.YOU.TRAVELLING.ON.A.PAC=="Yes (go to Q15a)" )
+names(count_yes)
+levels(Q14.ARE.YOU.TRAVELLING.ON.A.PAC)  ##"Yes (go to Q15a)" "No (go to Q17)" 
+count_yes$daaat1.Q14.ARE.YOU.TRAVELLING.ON.A.PAC
+mean_pac<-mean(count_yes$daaat1.Q15A.AMOUNT.PAID.FOR.THE.PACKAG, na.rm = TRUE)
+mean_pac  ##  120630.4
+
+count_no<-subset(count_tour, count_tour$daaat1.Q14.ARE.YOU.TRAVELLING.ON.A.PAC=="No (go to Q17)")
+count_no$daaat1.Q14.ARE.YOU.TRAVELLING.ON.A.PAC
+mean_pac_no<-mean(count_no$daaat1.ONE.OR.MORE, na.rm = TRUE)
+mean_pac_no   ##99033.23
+mean_no<-round(mean_pac_no ,2)
+
+d<-c(mean_pac,mean_no)
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+#country of residence type of tour
+daaat1<-subset(data17, COUNTY.OF.RESID.2=="Tanzania")
+daaat1
+daaat1$COUNTY.OF.RESID.2
+count_tour<-data.frame(daaat1$COUNTY.OF.RESID.2,daaat1$Q14.ARE.YOU.TRAVELLING.ON.A.PAC,daaat1$Q15A.AMOUNT.PAID.FOR.THE.PACKAG,daaat1$ONE.OR.MORE)
+head(count_tour)
+names(count_tour)
+daaat1$Q14.ARE.YOU.TRAVELLING.ON.A.PAC
+#setwd("C:/Users/user/Desktop/cod")
+#write.csv(count_tour, file="C:/Users/user/Desktop/cod/count_tour.csv")
+count_yes<-subset(count_tour, count_tour$daaat1.Q14.ARE.YOU.TRAVELLING.ON.A.PAC=="Yes (go to Q15a)" )
+names(count_yes)
+levels(Q14.ARE.YOU.TRAVELLING.ON.A.PAC)  ##"Yes (go to Q15a)" "No (go to Q17)" 
+count_yes$daaat1.Q14.ARE.YOU.TRAVELLING.ON.A.PAC
+mean_pac1<-mean(count_yes$daaat1.Q15A.AMOUNT.PAID.FOR.THE.PACKAG, na.rm = TRUE)
+mean_pac<-round(mean_pac1,2)  ## 134488.1
+mean_pac
+count_no<-subset(count_tour, count_tour$daaat1.Q14.ARE.YOU.TRAVELLING.ON.A.PAC=="No (go to Q17)" )
+count_no$daaat1.Q14.ARE.YOU.TRAVELLING.ON.A.PAC
+count_no$daaat1.ONE.OR.MORE
+mean_pac_no<-mean(count_no$daaat1.ONE.OR.MORE, na.rm = TRUE)
+mean_pac_no   ##45456.51
+mean_no<-round(mean_pac_no ,2)
+mean_no
+d<-c(mean_pac,mean_no)
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+#country of residence type of tour
+daaat1<-subset(data17, COUNTY.OF.RESID.2=="Rwanda")
+daaat1
+daaat1$COUNTY.OF.RESID.2
+count_tour<-data.frame(daaat1$COUNTY.OF.RESID.2,daaat1$Q14.ARE.YOU.TRAVELLING.ON.A.PAC,daaat1$Q15A.AMOUNT.PAID.FOR.THE.PACKAG,daaat1$ONE.OR.MORE)
+head(count_tour)
+names(count_tour)
+daaat1$Q14.ARE.YOU.TRAVELLING.ON.A.PAC
+#setwd("C:/Users/user/Desktop/cod")
+#write.csv(count_tour, file="C:/Users/user/Desktop/cod/count_tour.csv")
+count_yes<-subset(count_tour, count_tour$daaat1.Q14.ARE.YOU.TRAVELLING.ON.A.PAC=="Yes (go to Q15a)" )
+names(count_yes)
+levels(Q14.ARE.YOU.TRAVELLING.ON.A.PAC)  ##"Yes (go to Q15a)" "No (go to Q17)" 
+count_yes$daaat1.Q14.ARE.YOU.TRAVELLING.ON.A.PAC
+mean_pac1<-mean(count_yes$daaat1.Q15A.AMOUNT.PAID.FOR.THE.PACKAG, na.rm = TRUE)
+mean_pac<-round(mean_pac1,2)  ##
+mean_pac
+count_no<-subset(count_tour, count_tour$daaat1.Q14.ARE.YOU.TRAVELLING.ON.A.PAC=="No (go to Q17)")
+count_no$daaat1.Q14.ARE.YOU.TRAVELLING.ON.A.PAC
+mean_pac_no<-mean(count_no$daaat1.ONE.OR.MORE, na.rm = TRUE)
+mean_pac_no   ##
+mean_no<-round(mean_pac_no ,2)
+mean_no
+d<-c(mean_pac,mean_no)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+#levels(COUNTY.OF.RESID.2)## "South Sudan"
+#country of residence type of tour
+daaat1<-subset(data17, COUNTY.OF.RESID.2=="Burundi")
+#daaat1
+#daaat1$COUNTY.OF.RESID.2
+count_tour<-data.frame(daaat1$COUNTY.OF.RESID.2,daaat1$Q14.ARE.YOU.TRAVELLING.ON.A.PAC,daaat1$Q15A.AMOUNT.PAID.FOR.THE.PACKAG,daaat1$ONE.OR.MORE)
+#head(count_tour)
+#names(count_tour)
+#daaat1$Q14.ARE.YOU.TRAVELLING.ON.A.PAC
+#setwd("C:/Users/user/Desktop/cod")
+#write.csv(count_tour, file="C:/Users/user/Desktop/cod/co_bu.csv")
+count_yes<-subset(count_tour, count_tour$daaat1.Q14.ARE.YOU.TRAVELLING.ON.A.PAC=="Yes (go to Q15a)" )
+#levels(Q14.ARE.YOU.TRAVELLING.ON.A.PAC)  ##"Yes (go to Q15a)" "No (go to Q17)" 
+#count_yes$daaat1.Q14.ARE.YOU.TRAVELLING.ON.A.PAC
+mean_pac1<-mean(count_yes$daaat1.Q15A.AMOUNT.PAID.FOR.THE.PACKAG, na.rm = TRUE)
+mean_pac<-round(mean_pac1,2)  ##
+mean_pac
+count_no<-subset(count_tour, count_tour$daaat1.Q14.ARE.YOU.TRAVELLING.ON.A.PAC=="No (go to Q17)")
+#count_no$daaat1.Q14.ARE.YOU.TRAVELLING.ON.A.PAC
+mean_pac_no<-mean(count_no$daaat1.ONE.OR.MORE, na.rm = TRUE)
+mean_pac_no   ##
+mean_no<-round(mean_pac_no ,2)
+mean_no
+d<-c(mean_pac,mean_no)
+#d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+
+```{r}
+#levels(COUNTY.OF.RESID.2)## "South Sudan"
+#country of residence type of tour
+daaat1<-subset(data17, COUNTY.OF.RESID.2=="South Sudan" )
+#daaat1
+#daaat1$COUNTY.OF.RESID.2
+count_tour<-data.frame(daaat1$COUNTY.OF.RESID.2,daaat1$Q14.ARE.YOU.TRAVELLING.ON.A.PAC,daaat1$Q15A.AMOUNT.PAID.FOR.THE.PACKAG,daaat1$ONE.OR.MORE)
+#head(count_tour)
+#names(count_tour)
+#daaat1$Q14.ARE.YOU.TRAVELLING.ON.A.PAC
+#setwd("C:/Users/user/Desktop/cod")
+#write.csv(count_tour, file="C:/Users/user/Desktop/cod/co_bu.csv")
+count_yes<-subset(count_tour, count_tour$daaat1.Q14.ARE.YOU.TRAVELLING.ON.A.PAC=="Yes (go to Q15a)" )
+#levels(Q14.ARE.YOU.TRAVELLING.ON.A.PAC)  ##"Yes (go to Q15a)" "No (go to Q17)" 
+#count_yes$daaat1.Q14.ARE.YOU.TRAVELLING.ON.A.PAC
+mean_pac1<-mean(count_yes$daaat1.Q15A.AMOUNT.PAID.FOR.THE.PACKAG, na.rm = TRUE)
+mean_pac<-round(mean_pac1,2)  ##
+#mean_pac
+count_no<-subset(count_tour, count_tour$daaat1.Q14.ARE.YOU.TRAVELLING.ON.A.PAC=="No (go to Q17)")
+#count_no$daaat1.Q14.ARE.YOU.TRAVELLING.ON.A.PAC
+mean_pac_no<-mean(count_no$daaat1.ONE.OR.MORE, na.rm = TRUE)
+#mean_pac_no   ##
+mean_no<-round(mean_pac_no ,2)
+#mean_no
+d<-c(mean_pac,mean_no)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+# "Uganda"   "Tanzania"   "Rwanda"   "Burundi"  "South Sudan"     
+#levels(COUNTY.OF.RESID.2)
+#mean for countries
+dumb<-subset(data17, COUNTY.OF.RESID.2=="Uganda" )
+#dumb
+mean_exp<-mean(dumb$ONE.OR.MORE, na.rm = TRUE)
+mean_ug<-round(mean_exp,2)
+mean_ug
+
+dumb<-subset(data17, COUNTY.OF.RESID.2=="Tanzania")
+#dumb
+mean_exp<-mean(dumb$ONE.OR.MORE, na.rm = TRUE)
+mean_tz<-round(mean_exp,2)
+mean_tz
+
+
+dumb<-subset(data17, COUNTY.OF.RESID.2=="Rwanda")
+#dumb
+mean_exp<-mean(dumb$ONE.OR.MORE, na.rm = TRUE)
+mean_rw<-round(mean_exp,2)
+mean_rw
+
+
+dumb<-subset(data17, COUNTY.OF.RESID.2=="Burundi")
+#dumb
+mean_exp<-mean(dumb$ONE.OR.MORE, na.rm = TRUE)
+mean_br<-round(mean_exp,2)
+mean_br
+
+
+dumb<-subset(data17, COUNTY.OF.RESID.2=="South Sudan")
+#dumb
+mean_exp<-mean(dumb$ONE.OR.MORE, na.rm = TRUE)
+mean_ss<-round(mean_exp,2)
+mean_ss
+
+d<-c(mean_ug, mean_tz, mean_rw,mean_br, mean_ss)
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+
+```
+```{r}
+# "Uganda"   "Tanzania"   "Rwanda"   "Burundi"  "South Sudan"     
+#levels(COUNTY.OF.RESID.2)
+#mean for countries
+dumb1<-subset(data17, COUNTY.OF.RESID.2=="Uganda" )
+#dumb1
+mean_exp<-mean(dumb1$ONE.OR.MORE, na.rm = TRUE)
+mean_ug<-round(mean_exp,2)
+mean_ug
+
+dumb1<-subset(data17, COUNTY.OF.RESID.2=="Tanzania")
+#dumb1
+mean_exp<-mean(dumb1$ONE.OR.MORE, na.rm = TRUE)
+mean_tz<-round(mean_exp,2)
+mean_tz
+
+
+dumb1<-subset(data17, COUNTY.OF.RESID.2=="Rwanda")
+#dumb1
+mean_exp<-mean(dumb1$ONE.OR.MORE, na.rm = TRUE)
+mean_rw<-round(mean_exp,2)
+mean_rw
+
+
+dumb1<-subset(data17, COUNTY.OF.RESID.2=="Burundi")
+#dumb1
+mean_exp<-mean(dumb1$ONE.OR.MORE, na.rm = TRUE)
+mean_br<-round(mean_exp,2)
+mean_br
+
+
+dumb1<-subset(data17, COUNTY.OF.RESID.2=="South Sudan")
+#dumb1
+mean_exp<-mean(dumb1$ONE.OR.MORE, na.rm = TRUE)
+mean_ss<-round(mean_exp,2)
+mean_ss
+
+d<-c(mean_ug, mean_tz, mean_rw,mean_br, mean_ss)
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+
+```
+
+```{r}
+daily expenditure
+# "Uganda"   "Tanzania"   "Rwanda"   "Burundi"  "South Sudan"     
+#levels(COUNTY.OF.RESID.2)
+#mean for countries
+dumb1<-subset(data17, COUNTY.OF.RESID.2=="Uganda" )
+#dumb1
+mean_exp<-mean(dumb1$Q15C.ADDITIONAL.EXPENDITURE.IND, na.rm = TRUE)
+mean_ug<-round(mean_exp,2)
+mean_ug
+
+dumb1<-subset(data17, COUNTY.OF.RESID.2=="Tanzania")
+#dumb1
+mean_exp<-mean(dumb1$ONE.OR.MORE, na.rm = TRUE)
+mean_tz<-round(mean_exp,2)
+mean_tz
+
+
+dumb1<-subset(data17, COUNTY.OF.RESID.2=="Rwanda")
+#dumb1
+mean_exp<-mean(dumb1$ONE.OR.MORE, na.rm = TRUE)
+mean_rw<-round(mean_exp,2)
+mean_rw
+
+
+dumb1<-subset(data17, COUNTY.OF.RESID.2=="Burundi")
+#dumb1
+mean_exp<-mean(dumb1$ONE.OR.MORE, na.rm = TRUE)
+mean_br<-round(mean_exp,2)
+mean_br
+
+
+dumb1<-subset(data17, COUNTY.OF.RESID.2=="South Sudan")
+#dumb1
+mean_exp<-mean(dumb1$ONE.OR.MORE, na.rm = TRUE)
+mean_ss<-round(mean_exp,2)
+mean_ss
+
+d<-c(mean_ug, mean_tz, mean_rw,mean_br, mean_ss)
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+
+```
+```{r}
+#"PAC.FARE", "PAC.DOMESTIC.TRANS","PAC.ACCOM", "PAC.MEALS" , "PAC.DRINKS", "PAC.NATIO.PARK" , "PAC.MUS" , "PAC.CULT.EVENT","PAC.SIGHT.SEE"                    "PAC.EVENT.CONF", "PAC.EDUC.TOURS" ,"PAC.OTHERS"
+
+A1<-table(PAC.FARE)
+A_1<-cbind(A1, prop.table(A1)*100)
+A<-round(A_1,2)
+#A
+B1<-table(PAC.DOMESTIC.TRANS)
+B_1<-cbind(B1, prop.table(B1)*100)
+B<-round(B_1,2)
+#B
+
+C1<-table(PAC.ACCOM)
+C_1<-cbind(C1, prop.table(C1)*100)
+C<-round(C_1,2)
+#C
+
+D1<-table(PAC.MEALS)
+D_1<-cbind(D1, prop.table(D1)*100)
+D<-round(D_1,2)
+#D
+
+E1<-table(PAC.MUS)
+E_1<-cbind(E1, prop.table(E1)*100)
+E<-round(E_1,2)
+#E
+
+F1<-table(PAC.DRINKS)
+F_1<-cbind(F1, prop.table(F1)*100)
+F<-round(F_1,2)
+#F
+
+G1<-table(PAC.NATIO.PARK)
+G_1<-cbind(G1, prop.table(G1)*100)
+G<-round(G_1,2)
+#G
+
+H1<-table(PAC.CULT.EVENT)
+H_1<-cbind(H1, prop.table(H1)*100)
+H<-round(H_1,2)
+#H
+
+I1<-table(PAC.SIGHT.SEE)
+I_1<-cbind(I1, prop.table(I1)*100)
+I<-round(I_1,2)
+#I
+
+J1<-table(PAC.EVENT.CONF)
+J_1<-cbind(J1, prop.table(J1)*100)
+J<-round(J_1,2)
+#J
+
+K1<-table(PAC.EDUC.TOURS)
+K_1<-cbind(K1, prop.table(K1)*100)
+K<-round(K_1,2)
+#K
+
+L1<-table(PAC.OTHERS)
+L_1<-cbind(L1, prop.table(L1)*100)
+L<-round(L_1,2)
+#L
+
+d<-c(A,B,C,D,E,F,G,H,I,J,K,L)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+#"ACCOMODATION" , "FOOD.AND.DRINKS","ROAD.TRANSPORT","AIR.TRANSPORT" ,"RAIL.TRANSPORT","WATER.TRANSPORT" ,"RECREATION.AND.AMUSEMENTS"      
+#"HANDICRAFTS" , "SIGHTSEEING","MEDICAL" ,"OTHERS"
+A1<-mean(data17$ACCOMODATION, na.rm = TRUE)
+A<-round(A1,2)
+
+B1<-mean(data17$FOOD.AND.DRINKS, na.rm = TRUE)
+B<-round(B1,2)
+
+C1<-mean(data17$ROAD.TRANSPORT, na.rm = TRUE)
+C<-round(C1,2)
+
+D1<-mean(data17$AIR.TRANSPORT, na.rm = TRUE)
+D<-round(D1,2)
+
+E1<-mean(data17$RAIL.TRANSPORT, na.rm = TRUE)
+E<-round(E1,2)
+
+F1<-mean(data17$WATER.TRANSPORT, na.rm = TRUE)
+F<-round(F1,2)
+
+G1<-mean(data17$RECREATION.AND.AMUSEMENTS, na.rm = TRUE)
+G<-round(G1,2)
+
+H1<-mean(data17$HANDICRAFTS, na.rm = TRUE)
+H<-round(H1,2)
+
+I1<-mean(data17$SIGHTSEEING, na.rm = TRUE)
+I<-round(I1,2)
+
+J1<-mean(data17$MEDICAL, na.rm = TRUE)
+J<-round(J1,2)
+
+K1<-mean(data17$OTHERS, na.rm = TRUE)
+K<-round(K1,2)
+d<-c(A,B,C,D,E,F,G,H,I,J,K)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+
+```
+```{r}
+#SPEND PER COUNTRY non package tour  ## "Uganda" ,"Tanzania" ,"Rwanda" ,"Burundi" ,"South Sudan"   
+##accomodation
+
+A1<-subset(data17, COUNTY.OF.RESID.2=="Uganda")
+A<-mean(A1$ACCOMODATION,na.rm = TRUE)
+
+B1<-subset(data17, COUNTY.OF.RESID.2=="Tanzania")
+B<-mean(B1$ACCOMODATION,na.rm = TRUE)
+
+C1<-subset(data17, COUNTY.OF.RESID.2=="Rwanda")
+C<-mean(C1$ACCOMODATION,na.rm = TRUE)
+
+D1<-subset(data17, COUNTY.OF.RESID.2=="Burundi")
+D<-mean(D1$ACCOMODATION,na.rm = TRUE)
+
+E1<-subset(data17, COUNTY.OF.RESID.2=="South Sudan")
+E<-mean(E1$ACCOMODATION,na.rm = TRUE)
+
+X<-c(A,B,C,D,E)
+d<-round(X,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+
+```{r}
+##FOOD.AND.DRINKS
+A1<-subset(data17, COUNTY.OF.RESID.2=="Uganda")
+A<-mean(A1$FOOD.AND.DRINKS,na.rm = TRUE)
+
+B1<-subset(data17, COUNTY.OF.RESID.2=="Tanzania")
+B<-mean(B1$FOOD.AND.DRINKS,na.rm = TRUE)
+
+C1<-subset(data17, COUNTY.OF.RESID.2=="Rwanda")
+C<-mean(C1$FOOD.AND.DRINKS,na.rm = TRUE)
+
+D1<-subset(data17, COUNTY.OF.RESID.2=="Burundi")
+D<-mean(D1$FOOD.AND.DRINKS,na.rm = TRUE)
+
+E1<-subset(data17, COUNTY.OF.RESID.2=="South Sudan")
+E<-mean(E1$FOOD.AND.DRINKS,na.rm = TRUE)
+
+X<-c(A,B,C,D,E)
+d<-round(X,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+
+
+```{r}
+#road transport
+A1<-subset(data17, COUNTY.OF.RESID.2=="Uganda")
+A<-mean(A1$ROAD.TRANSPORT,na.rm = TRUE)
+A
+
+B1<-subset(data17, COUNTY.OF.RESID.2=="Tanzania")
+B<-mean(B1$ROAD.TRANSPORT,na.rm = TRUE)
+B
+C1<-subset(data17, COUNTY.OF.RESID.2=="Rwanda")
+C<-mean(C1$ROAD.TRANSPORT,na.rm = TRUE)
+C
+
+D1<-subset(data17, COUNTY.OF.RESID.2=="Burundi")
+D<-mean(D1$ROAD.TRANSPORT,na.rm = TRUE)
+D
+
+E1<-subset(data17, COUNTY.OF.RESID.2=="South Sudan")
+E<-mean(E1$ROAD.TRANSPORT,na.rm = TRUE)
+
+X<-c(A,B,C,D,E)
+d<-round(X,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+#air transport
+A1<-subset(data17, COUNTY.OF.RESID.2=="Uganda")
+A<-mean(A1$AIR.TRANSPORT,na.rm = TRUE)
+A
+
+B1<-subset(data17, COUNTY.OF.RESID.2=="Tanzania")
+B<-mean(B1$AIR.TRANSPORT,na.rm = TRUE)
+B
+
+C1<-subset(data17, COUNTY.OF.RESID.2=="Rwanda")
+C<-mean(C1$AIR.TRANSPORT,na.rm = TRUE)
+C
+
+D1<-subset(data17, COUNTY.OF.RESID.2=="Burundi")
+D<-mean(D1$AIR.TRANSPORT,na.rm = TRUE)
+D
+
+E1<-subset(data17, COUNTY.OF.RESID.2=="South Sudan")
+E<-mean(E1$AIR.TRANSPORT,na.rm = TRUE)
+E
+
+X<-c(A,B,C,D,E)
+d<-round(X,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+
+```{r}
+#rail transport
+A1<-subset(data17, COUNTY.OF.RESID.2=="Uganda")
+A<-mean(A1$RAIL.TRANSPORT,na.rm = TRUE)
+A
+
+B1<-subset(data17, COUNTY.OF.RESID.2=="Tanzania")
+B<-mean(B1$RAIL.TRANSPORT,na.rm = TRUE)
+B
+
+C1<-subset(data17, COUNTY.OF.RESID.2=="Rwanda")
+C<-mean(C1$RAIL.TRANSPORT,na.rm = TRUE)
+C
+
+D1<-subset(data17, COUNTY.OF.RESID.2=="Burundi")
+D<-mean(D1$RAIL.TRANSPORT,na.rm = TRUE)
+D
+
+E1<-subset(data17, COUNTY.OF.RESID.2=="South Sudan")
+E<-mean(E1$RAIL.TRANSPORT,na.rm = TRUE)
+E
+
+X<-c(A,B,C,D,E)
+d<-round(X,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+
+
+
+```{r}
+#water transport
+A1<-subset(data17, COUNTY.OF.RESID.2=="Uganda")
+A<-mean(A1$WATER.TRANSPORT,na.rm = TRUE)
+A
+
+B1<-subset(data17, COUNTY.OF.RESID.2=="Tanzania")
+B<-mean(B1$WATER.TRANSPORT,na.rm = TRUE)
+B
+
+C1<-subset(data17, COUNTY.OF.RESID.2=="Rwanda")
+C<-mean(C1$WATER.TRANSPORT,na.rm = TRUE)
+C
+
+D1<-subset(data17, COUNTY.OF.RESID.2=="Burundi")
+D<-mean(D1$WATER.TRANSPORT,na.rm = TRUE)
+D
+
+E1<-subset(data17, COUNTY.OF.RESID.2=="South Sudan")
+E<-mean(E1$WATER.TRANSPORT,na.rm = TRUE)
+E
+X<-c(A,B,C,D,E)
+d<-round(X,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+##recreation
+A1<-subset(data17, COUNTY.OF.RESID.2=="Uganda")
+A<-mean(A1$RECREATION.AND.AMUSEMENTS,na.rm = TRUE)
+A
+
+B1<-subset(data17, COUNTY.OF.RESID.2=="Tanzania")
+B<-mean(B1$RECREATION.AND.AMUSEMENTS,na.rm = TRUE)
+B
+
+C1<-subset(data17, COUNTY.OF.RESID.2=="Rwanda")
+C<-mean(C1$RECREATION.AND.AMUSEMENTS,na.rm = TRUE)
+C
+
+D1<-subset(data17, COUNTY.OF.RESID.2=="Burundi")
+D<-mean(D1$RECREATION.AND.AMUSEMENTS,na.rm = TRUE)
+D
+
+E1<-subset(data17, COUNTY.OF.RESID.2=="South Sudan")
+E<-mean(E1$RECREATION.AND.AMUSEMENTS,na.rm = TRUE)
+E
+X<-c(A,B,C,D,E)
+d<-round(X,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+
+```{r}
+##handicraft
+A1<-subset(data17, COUNTY.OF.RESID.2=="Uganda")
+A<-mean(A1$HANDICRAFTS,na.rm = TRUE)
+A
+
+B1<-subset(data17, COUNTY.OF.RESID.2=="Tanzania")
+B<-mean(B1$HANDICRAFTS,na.rm = TRUE)
+B
+
+C1<-subset(data17, COUNTY.OF.RESID.2=="Rwanda")
+C<-mean(C1$HANDICRAFTS,na.rm = TRUE)
+C
+
+D1<-subset(data17, COUNTY.OF.RESID.2=="Burundi")
+D<-mean(D1$HANDICRAFTS,na.rm = TRUE)
+D
+
+E1<-subset(data17, COUNTY.OF.RESID.2=="South Sudan")
+E<-mean(E1$HANDICRAFTS,na.rm = TRUE)
+E
+X<-c(A,B,C,D,E)
+d<-round(X,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+##sightseeing
+A1<-subset(data17, COUNTY.OF.RESID.2=="Uganda")
+A<-mean(A1$SIGHTSEEING,na.rm = TRUE)
+A
+
+B1<-subset(data17, COUNTY.OF.RESID.2=="Tanzania")
+B<-mean(B1$SIGHTSEEING,na.rm = TRUE)
+B
+
+C1<-subset(data17, COUNTY.OF.RESID.2=="Rwanda")
+C<-mean(C1$SIGHTSEEING,na.rm = TRUE)
+C
+
+D1<-subset(data17, COUNTY.OF.RESID.2=="Burundi")
+D<-mean(D1$SIGHTSEEING,na.rm = TRUE)
+D
+
+E1<-subset(data17, COUNTY.OF.RESID.2=="South Sudan")
+E<-mean(E1$SIGHTSEEING,na.rm = TRUE)
+X<-c(A,B,C,D,E)
+d<-round(X,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+##medical
+A1<-subset(data17, COUNTY.OF.RESID.2=="Uganda")
+A<-mean(A1$MEDICAL,na.rm = TRUE)
+A
+
+B1<-subset(data17, COUNTY.OF.RESID.2=="Tanzania")
+B<-mean(B1$MEDICAL,na.rm = TRUE)
+B
+
+C1<-subset(data17, COUNTY.OF.RESID.2=="Rwanda")
+C<-mean(C1$MEDICAL,na.rm = TRUE)
+C
+
+D1<-subset(data17, COUNTY.OF.RESID.2=="Burundi")
+D<-mean(D1$MEDICAL,na.rm = TRUE)
+D
+
+E1<-subset(data17, COUNTY.OF.RESID.2=="South Sudan")
+E<-mean(E1$MEDICAL,na.rm = TRUE)
+E
+X<-c(A,B,C,D,E)
+d<-round(X,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+##others
+A1<-subset(data17, COUNTY.OF.RESID.2=="Uganda")
+A<-mean(A1$OTHERS,na.rm = TRUE)
+A
+
+B1<-subset(data17, COUNTY.OF.RESID.2=="Tanzania")
+B<-mean(B1$OTHERS,na.rm = TRUE)
+B
+
+C1<-subset(data17, COUNTY.OF.RESID.2=="Rwanda")
+C<-mean(C1$OTHERS,na.rm = TRUE)
+C
+
+D1<-subset(data17, COUNTY.OF.RESID.2=="Burundi")
+D<-mean(D1$OTHERS,na.rm = TRUE)
+D
+
+E1<-subset(data17, COUNTY.OF.RESID.2=="South Sudan")
+E<-mean(E1$OTHERS,na.rm = TRUE)
+E
+X<-c(A,B,C,D,E)
+d<-round(X,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+#levels(data17$MAIN.PURPOSE.FOR.YOUR.VISIT)
+# "Metting/Incentive/Conference/Exhibition (MICE)" "Bussiness/ Professiional"                       "Study/Student"                                
+# "Holiday/Leisure"                                "Shopping"                                       "Cultural Event"                               
+ #"Sport Event"                                    "Second Residence"                               "Visiting Relatives/Friends"                   
+# "Health/Treatment"                               "Religion/Pilgrimage"                            "Others (reasons)"  
+dat<-subset(data17, data17$MAIN.PURPOSE.FOR.YOUR.VISIT=="Metting/Incentive/Conference/Exhibition (MICE)")
+A<-mean(dat$TOTAL, na.rm = TRUE)
+A
+dat<-subset(data17, data17$MAIN.PURPOSE.FOR.YOUR.VISIT=="Bussiness/ Professiional")
+B<-mean(dat$TOTAL, na.rm = TRUE)
+
+dat<-subset(data17, data17$MAIN.PURPOSE.FOR.YOUR.VISIT=="Study/Student")
+C<-mean(dat$TOTAL, na.rm = TRUE)
+
+
+dat<-subset(data17, data17$MAIN.PURPOSE.FOR.YOUR.VISIT=="Holiday/Leisure")
+D<-mean(dat$TOTAL, na.rm = TRUE)
+
+
+dat<-subset(data17, data17$MAIN.PURPOSE.FOR.YOUR.VISIT=="Shopping")
+E<-mean(dat$TOTAL, na.rm = TRUE)
+
+
+dat<-subset(data17, data17$MAIN.PURPOSE.FOR.YOUR.VISIT=="Cultural Event")
+F<-mean(dat$TOTAL, na.rm = TRUE)
+
+
+dat<-subset(data17, data17$MAIN.PURPOSE.FOR.YOUR.VISIT=="Sport Event")
+G<-mean(dat$TOTAL, na.rm = TRUE)
+
+
+dat<-subset(data17, data17$MAIN.PURPOSE.FOR.YOUR.VISIT=="Second Residence")
+H<-mean(dat$TOTAL, na.rm = TRUE)
+
+
+dat<-subset(data17, data17$MAIN.PURPOSE.FOR.YOUR.VISIT=="Visiting Relatives/Friends")
+I<-mean(dat$TOTAL, na.rm = TRUE)
+
+
+dat<-subset(data17, data17$MAIN.PURPOSE.FOR.YOUR.VISIT=="Health/Treatment")
+J<-mean(dat$TOTAL, na.rm = TRUE)
+
+
+dat<-subset(data17, data17$MAIN.PURPOSE.FOR.YOUR.VISIT=="Religion/Pilgrimage")
+K<-mean(dat$TOTAL, na.rm = TRUE)
+
+dat<-subset(data17, data17$MAIN.PURPOSE.FOR.YOUR.VISIT=="Others (reasons)")
+L<-mean(dat$TOTAL, na.rm = TRUE)
+X<-c(A,B,C,D,E,F,G,H,I,J,K,L)
+d<-round(X,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+##Mean Expenditure by Purpose of Visit and Item
+# "Metting/Incentive/Conference/Exhibition (MICE)" "Bussiness/ Professiional"                       "Study/Student"                                
+# "Holiday/Leisure"                                "Shopping"                                       "Cultural Event"                               
+ #"Sport Event"                                    "Second Residence"                               "Visiting Relatives/Friends"                   
+# "Health/Treatment"   "Religion/Pilgrimage"                            "Others (reasons)"  
+dat<-subset(data17, data17$MAIN.PURPOSE.FOR.YOUR.VISIT=="Metting/Incentive/Conference/Exhibition (MICE)")
+A<-mean(dat$ACCOMODATION, na.rm = TRUE)
+A
+dat<-subset(data17, data17$MAIN.PURPOSE.FOR.YOUR.VISIT=="Bussiness/ Professiional")
+B<-mean(dat$ACCOMODATION, na.rm = TRUE)
+
+dat<-subset(data17, data17$MAIN.PURPOSE.FOR.YOUR.VISIT=="Study/Student" )
+C<-mean(dat$ACCOMODATION, na.rm = TRUE)
+
+dat<-subset(data17, data17$MAIN.PURPOSE.FOR.YOUR.VISIT=="Holiday/Leisure")
+D<-mean(dat$ACCOMODATION, na.rm = TRUE)
+
+dat<-subset(data17, data17$MAIN.PURPOSE.FOR.YOUR.VISIT=="Shopping")
+E<-mean(dat$ACCOMODATION, na.rm = TRUE)
+
+dat<-subset(data17, data17$MAIN.PURPOSE.FOR.YOUR.VISIT=="Cultural Event" )
+F<-mean(dat$ACCOMODATION, na.rm = TRUE)
+
+dat<-subset(data17, data17$MAIN.PURPOSE.FOR.YOUR.VISIT=="Sport Event")
+G<-mean(dat$ACCOMODATION, na.rm = TRUE)
+
+dat<-subset(data17, data17$MAIN.PURPOSE.FOR.YOUR.VISIT=="Second Residence" )
+H<-mean(dat$ACCOMODATION, na.rm = TRUE)
+
+dat<-subset(data17, data17$MAIN.PURPOSE.FOR.YOUR.VISIT=="Visiting Relatives/Friends")
+I<-mean(dat$ACCOMODATION, na.rm = TRUE)
+
+dat<-subset(data17, data17$MAIN.PURPOSE.FOR.YOUR.VISIT=="Health/Treatment")
+J<-mean(dat$ACCOMODATION, na.rm = TRUE)
+
+dat<-subset(data17, data17$MAIN.PURPOSE.FOR.YOUR.VISIT=="Religion/Pilgrimage")
+K<-mean(dat$ACCOMODATION, na.rm = TRUE)
+
+
+dat<-subset(data17, data17$MAIN.PURPOSE.FOR.YOUR.VISIT== "Others (reasons)")
+L<-mean(dat$ACCOMODATION, na.rm = TRUE)
+
+X<-c(A,B,C,D,E,F,G,H,I,J,K,L)
+d<-round(X,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+UGANDA
+##Mean Expenditure per Item of Non-Package Tours by Country of Residence , December 2017
+exp <- data17[ which(COUNTY.OF.RESID.2=="Uganda"),]
+exp$COUNTY.OF.RESID.2
+a<-mean(exp$ACCOMODATION, na.rm = TRUE)
+b<-mean(exp$FOOD.AND.DRINKS, na.rm = TRUE)
+c<-mean(exp$ROAD.TRANSPORT, na.rm = TRUE)
+d<-mean(exp$AIR.TRANSPORT, na.rm = TRUE)
+e<-mean(exp$RAIL.TRANSPORT, na.rm=TRUE)
+f<-mean(exp$WATER.TRANSPORT, na.rm = TRUE)
+g<-mean(exp$RECREATION.AND.AMUSEMENTS, na.rm=TRUE)
+h<-mean(exp$HANDICRAFTS, na.rm=TRUE)
+i<-mean(exp$SIGHTSEEING, na.rm=TRUE)
+j<-mean(exp$MEDICAL, na.rm=TRUE)
+k<-mean(exp$OTHERS, na.rm=TRUE)
+l<-sum(a,b,c,d,e,f,g,h,i,j,k)
+exp$ONE.OR.MORE[is.na(exp$ONE.OR.MORE)]<-1
+exp$ONE.OR.MORE
+m<-sum(exp$ONE.OR.MORE)
+m
+D<-c(a,b,c,d,e,f,g,h,i,j,k,l,m)
+d<-round(D,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+TANZANIA
+##Mean Expenditure per Item of Non-Package Tours by Country of Residence , December 2017
+exp <- data17[ which(COUNTY.OF.RESID.2=="Tanzania"),]
+exp$COUNTY.OF.RESID.2
+a<-mean(exp$ACCOMODATION, na.rm = TRUE)
+b<-mean(exp$FOOD.AND.DRINKS, na.rm = TRUE)
+c<-mean(exp$ROAD.TRANSPORT, na.rm = TRUE)
+d<-mean(exp$AIR.TRANSPORT, na.rm = TRUE)
+e<-mean(exp$RAIL.TRANSPORT, na.rm=TRUE)
+f<-mean(exp$WATER.TRANSPORT, na.rm = TRUE)
+g<-mean(exp$RECREATION.AND.AMUSEMENTS, na.rm=TRUE)
+h<-mean(exp$HANDICRAFTS, na.rm=TRUE)
+i<-mean(exp$SIGHTSEEING, na.rm=TRUE)
+j<-mean(exp$MEDICAL, na.rm=TRUE)
+k<-mean(exp$OTHERS, na.rm=TRUE)
+l<-sum(a,b,c,d,e,f,g,h,i,j,k)
+exp$ONE.OR.MORE[is.na(exp$ONE.OR.MORE)]<-1
+exp$ONE.OR.MORE
+m<-sum(exp$ONE.OR.MORE)
+m
+D<-c(a,b,c,d,e,f,g,h,i,j,k,l,m)
+d<-round(D,2)
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+RWANDA
+##Mean Expenditure per Item of Non-Package Tours by Country of Residence , December 2017
+exp <- data17[ which(COUNTY.OF.RESID.2=="Rwanda"),]
+exp$COUNTY.OF.RESID.2
+a<-mean(exp$ACCOMODATION, na.rm = TRUE)
+b<-mean(exp$FOOD.AND.DRINKS, na.rm = TRUE)
+c<-mean(exp$ROAD.TRANSPORT, na.rm = TRUE)
+d<-mean(exp$AIR.TRANSPORT, na.rm = TRUE)
+e<-mean(exp$RAIL.TRANSPORT, na.rm=TRUE)
+f<-mean(exp$WATER.TRANSPORT, na.rm = TRUE)
+g<-mean(exp$RECREATION.AND.AMUSEMENTS, na.rm=TRUE)
+h<-mean(exp$HANDICRAFTS, na.rm=TRUE)
+i<-mean(exp$SIGHTSEEING, na.rm=TRUE)
+j<-mean(exp$MEDICAL, na.rm=TRUE)
+k<-mean(exp$OTHERS, na.rm=TRUE)
+l<-sum(a,b,c,d,e,f,g,h,i,j,k)
+exp$ONE.OR.MORE[is.na(exp$ONE.OR.MORE)]<-1
+exp$ONE.OR.MORE
+m<-sum(exp$ONE.OR.MORE)
+m
+D<-c(a,b,c,d,e,f,g,h,i,j,k,l,m)
+d<-round(D,2)
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+burundi
+##Mean Expenditure per Item of Non-Package Tours by Country of Residence , December 2017
+exp <- data17[ which(COUNTY.OF.RESID.2=="Burundi"),]
+exp$COUNTY.OF.RESID.2
+a<-mean(exp$ACCOMODATION, na.rm = TRUE)
+b<-mean(exp$FOOD.AND.DRINKS, na.rm = TRUE)
+c<-mean(exp$ROAD.TRANSPORT, na.rm = TRUE)
+d<-mean(exp$AIR.TRANSPORT, na.rm = TRUE)
+e<-mean(exp$RAIL.TRANSPORT, na.rm=TRUE)
+f<-mean(exp$WATER.TRANSPORT, na.rm = TRUE)
+g<-mean(exp$RECREATION.AND.AMUSEMENTS, na.rm=TRUE)
+h<-mean(exp$HANDICRAFTS, na.rm=TRUE)
+i<-mean(exp$SIGHTSEEING, na.rm=TRUE)
+j<-mean(exp$MEDICAL, na.rm=TRUE)
+l<-sum(a,b,c,d,e,f,g,h,i,j,k)
+exp$ONE.OR.MORE[is.na(exp$ONE.OR.MORE)]<-1
+exp$ONE.OR.MORE
+m<-sum(exp$ONE.OR.MORE)
+m
+D<-c(a,b,c,d,e,f,g,h,i,j,k,l,m)
+D<-c(a,b,c,d,e,f,g,h,i,j,k,l)
+d<-round(D,2)
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+#south sudan
+##Mean Expenditure per Item of Non-Package Tours by Country of Residence , December 2017
+exp <- data17[ which(COUNTY.OF.RESID.2=="South Sudan"),]
+exp$COUNTY.OF.RESID.2
+a<-mean(exp$ACCOMODATION, na.rm = TRUE)
+b<-mean(exp$FOOD.AND.DRINKS, na.rm = TRUE)
+c<-mean(exp$ROAD.TRANSPORT, na.rm = TRUE)
+d<-mean(exp$AIR.TRANSPORT, na.rm = TRUE)
+e<-mean(exp$RAIL.TRANSPORT, na.rm=TRUE)
+f<-mean(exp$WATER.TRANSPORT, na.rm = TRUE)
+g<-mean(exp$RECREATION.AND.AMUSEMENTS, na.rm=TRUE)
+h<-mean(exp$HANDICRAFTS, na.rm=TRUE)
+i<-mean(exp$SIGHTSEEING, na.rm=TRUE)
+j<-mean(exp$MEDICAL, na.rm=TRUE)
+k<-mean(exp$OTHERS, na.rm=TRUE)
+l<-sum(a,b,c,d,e,f,g,h,i,j,k)
+exp$ONE.OR.MORE[is.na(exp$ONE.OR.MORE)]<-1
+exp$ONE.OR.MORE
+m<-sum(exp$ONE.OR.MORE)
+m
+D<-c(a,b,c,d,e,f,g,h,i,j,k,l,m)
+d<-round(D,2)
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+#levels(MAIN.PURPOSE.FOR.YOUR.VISIT)
+# [1] "Metting/Incentive/Conference/Exhibition (MICE)" "Bussiness/ Professiional"                       "Study/Student"                                
+# [4] "Holiday/Leisure"                                "Shopping"                                       "Cultural Event"                               
+# [7] "Sport Event"                                    "Second Residence"                               "Visiting Relatives/Friends"                   
+#[10] "Health/Treatment"                               "Religion/Pilgrimage"                            "Others (reasons)"
+
+##Meeting/incentives/conferences/Exhibitons(MICF),business Professional,study/student,holiday/leisure,shopping for personal use,cultural event,sport event,second residence,visit friends/relatives,health/treatment,religion/pilgrimage,other reasons
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Metting/Incentive/Conference/Exhibition (MICE)"),]
+a<-mean(fd$TOTAL, na.rm = TRUE)
+
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Bussiness/ Professiional"),]
+b<-mean(fd$TOTAL, na.rm = TRUE)
+
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Study/Student"),]
+c<-mean(fd$TOTAL, na.rm = TRUE)
+
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Holiday/Leisure"),]
+d<-mean(fd$TOTAL, na.rm = TRUE)
+
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Shopping"),]
+e<-mean(fd$TOTAL, na.rm = TRUE)
+
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT== "Cultural Event"),]
+f<-mean(fd$TOTAL, na.rm = TRUE)
+
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Sport Event"),]
+g<-mean(fd$TOTAL, na.rm = TRUE)
+
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT== "Second Residence"),]
+h<-mean(fd$TOTAL, na.rm = TRUE)
+
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Visiting Relatives/Friends"),]
+i<-mean(fd$TOTAL, na.rm = TRUE)
+
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Health/Treatment"  ),]
+j<-mean(fd$TOTAL, na.rm = TRUE)
+
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT== "Religion/Pilgrimage"),]
+k<-mean(fd$TOTAL, na.rm = TRUE)
+
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT== "Others (reasons)"),]
+l<-mean(fd$TOTAL, na.rm = TRUE)
+m<-sum(a,b,c,d,e,f,g,h,i,j,k,l)
+m
+D<-c(a,b,c,d,e,f,g,h,i,j,k,l,m)
+D
+d<-round(D,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+##Mean Expenditure by Purpose of Visit and Item, December 2017
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Metting/Incentive/Conference/Exhibition (MICE)"),]
+a<-mean(fd$ACCOMODATION, na.rm = TRUE)
+
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Metting/Incentive/Conference/Exhibition (MICE)"),]
+c<-mean(fd$FOOD.AND.DRINKS, na.rm = TRUE)
+c
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Metting/Incentive/Conference/Exhibition (MICE)"),]
+d<-mean(fd$ROAD.TRANSPORT, na.rm = TRUE)
+d
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Metting/Incentive/Conference/Exhibition (MICE)"),]
+e<-mean(fd$AIR.TRANSPORT, na.rm = TRUE)
+e
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Metting/Incentive/Conference/Exhibition (MICE)"),]
+f<-mean(fd$RAIL.TRANSPORT, na.rm = TRUE)
+f
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Metting/Incentive/Conference/Exhibition (MICE)"),]
+g<-mean(fd$WATER.TRANSPORT, na.rm = TRUE)
+g
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Metting/Incentive/Conference/Exhibition (MICE)"),]
+h<-mean(fd$RECREATION.AND.AMUSEMENTS, na.rm = TRUE)
+h
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Metting/Incentive/Conference/Exhibition (MICE)"),]
+i<-mean(fd$HANDICRAFTS, na.rm = TRUE)
+i
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Metting/Incentive/Conference/Exhibition (MICE)"),]
+j<-mean(fd$SIGHTSEEING, na.rm = TRUE)
+j
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Metting/Incentive/Conference/Exhibition (MICE)"),]
+k<-mean(fd$MEDICAL, na.rm = TRUE)
+k
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Metting/Incentive/Conference/Exhibition (MICE)"),]
+l<-mean(fd$OTHERS, na.rm = TRUE)
+l
+m<-sum(a,c,d,e,f,g,h,i,j,k,l)
+m
+D<-c(a,c,d,e,f,g,h,i,j,k,l,m)
+D
+d<-round(D,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+
+```
+
+```{r}
+##Mean Expenditure by Purpose of Visit and Item, December 2017
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Bussiness/ Professiional"),]
+a<-mean(fd$ACCOMODATION, na.rm = TRUE)
+
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Bussiness/ Professiional"),]
+c<-mean(fd$FOOD.AND.DRINKS, na.rm = TRUE)
+c
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Bussiness/ Professiional"),]
+d<-mean(fd$ROAD.TRANSPORT, na.rm = TRUE)
+d
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Bussiness/ Professiional"),]
+e<-mean(fd$AIR.TRANSPORT, na.rm = TRUE)
+e
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Bussiness/ Professiional"),]
+f<-mean(fd$RAIL.TRANSPORT, na.rm = TRUE)
+f
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Bussiness/ Professiional"),]
+g<-mean(fd$WATER.TRANSPORT, na.rm = TRUE)
+g
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Bussiness/ Professiional"),]
+h<-mean(fd$RECREATION.AND.AMUSEMENTS, na.rm = TRUE)
+h
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Bussiness/ Professiional"),]
+i<-mean(fd$HANDICRAFTS, na.rm = TRUE)
+i
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Bussiness/ Professiional"),]
+j<-mean(fd$SIGHTSEEING, na.rm = TRUE)
+j
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Bussiness/ Professiional"),]
+k<-mean(fd$MEDICAL, na.rm = TRUE)
+k
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Bussiness/ Professiional"),]
+l<-mean(fd$OTHERS, na.rm = TRUE)
+l
+m<-sum(a,c,d,e,f,g,h,i,j,k,l)
+m
+D<-c(a,c,d,e,f,g,h,i,j,k,l,m)
+D
+d<-round(D,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+##Mean Expenditure by Purpose of Visit and Item, December 2017
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Study/Student"),]
+a<-mean(fd$ACCOMODATION, na.rm = TRUE)
+
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Study/Student"),]
+c<-mean(fd$FOOD.AND.DRINKS, na.rm = TRUE)
+c
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Study/Student"),]
+d<-mean(fd$ROAD.TRANSPORT, na.rm = TRUE)
+d
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Study/Student"),]
+e<-mean(fd$AIR.TRANSPORT, na.rm = TRUE)
+e
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Study/Student"),]
+f<-mean(fd$RAIL.TRANSPORT, na.rm = TRUE)
+f
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Study/Student"),]
+g<-mean(fd$WATER.TRANSPORT, na.rm = TRUE)
+g
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Study/Student"),]
+h<-mean(fd$RECREATION.AND.AMUSEMENTS, na.rm = TRUE)
+h
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Study/Student"),]
+i<-mean(fd$HANDICRAFTS, na.rm = TRUE)
+i
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Study/Student"),]
+j<-mean(fd$SIGHTSEEING, na.rm = TRUE)
+j
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Study/Student"),]
+k<-mean(fd$MEDICAL, na.rm = TRUE)
+k
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Study/Student"),]
+l<-mean(fd$OTHERS, na.rm = TRUE)
+l
+m<-sum(a,c,d,e,f,g,h,i,j,k,l)
+m
+D<-c(a,c,d,e,f,g,h,i,j,k,l,m)
+D
+d<-round(D,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+
+```{r}
+##Mean Expenditure by Purpose of Visit and Item, December 2017
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Holiday/Leisure"),]
+a<-mean(fd$ACCOMODATION, na.rm = TRUE)
+
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Holiday/Leisure"),]
+c<-mean(fd$FOOD.AND.DRINKS, na.rm = TRUE)
+c
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Holiday/Leisure"),]
+d<-mean(fd$ROAD.TRANSPORT, na.rm = TRUE)
+d
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Holiday/Leisure"),]
+e<-mean(fd$AIR.TRANSPORT, na.rm = TRUE)
+e
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Holiday/Leisure"),]
+f<-mean(fd$RAIL.TRANSPORT, na.rm = TRUE)
+f
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Holiday/Leisure"),]
+g<-mean(fd$WATER.TRANSPORT, na.rm = TRUE)
+g
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Holiday/Leisure"),]
+h<-mean(fd$RECREATION.AND.AMUSEMENTS, na.rm = TRUE)
+h
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Holiday/Leisure"),]
+i<-mean(fd$HANDICRAFTS, na.rm = TRUE)
+i
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Holiday/Leisure"),]
+j<-mean(fd$SIGHTSEEING, na.rm = TRUE)
+j
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Holiday/Leisure"),]
+k<-mean(fd$MEDICAL, na.rm = TRUE)
+k
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Holiday/Leisure"),]
+l<-mean(fd$OTHERS, na.rm = TRUE)
+l
+m<-sum(a,c,d,e,f,g,h,i,j,k,l)
+m
+D<-c(a,c,d,e,f,g,h,i,j,k,l,m)
+D
+d<-round(D,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+##Mean Expenditure by Purpose of Visit and Item, December 2017
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Shopping"),]
+a<-mean(fd$ACCOMODATION, na.rm = TRUE)
+
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Shopping"),]
+c<-mean(fd$FOOD.AND.DRINKS, na.rm = TRUE)
+c
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Shopping"),]
+d<-mean(fd$ROAD.TRANSPORT, na.rm = TRUE)
+d
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Shopping"),]
+e<-mean(fd$AIR.TRANSPORT, na.rm = TRUE)
+e
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Shopping"),]
+f<-mean(fd$RAIL.TRANSPORT, na.rm = TRUE)
+f
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Shopping"),]
+g<-mean(fd$WATER.TRANSPORT, na.rm = TRUE)
+g
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Shopping"),]
+h<-mean(fd$RECREATION.AND.AMUSEMENTS, na.rm = TRUE)
+h
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Shopping"),]
+i<-mean(fd$HANDICRAFTS, na.rm = TRUE)
+i
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Shopping"),]
+j<-mean(fd$SIGHTSEEING, na.rm = TRUE)
+j
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Shopping"),]
+k<-mean(fd$MEDICAL, na.rm = TRUE)
+k
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Shopping"),]
+l<-mean(fd$OTHERS, na.rm = TRUE)
+l
+m<-sum(a,c,d,e,f,g,h,i,j,k,l)
+m
+D<-c(a,c,d,e,f,g,h,i,j,k,l,m)
+D
+d<-round(D,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+
+```{r}
+##Mean Expenditure by Purpose of Visit and Item, December 2017
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Cultural Event"),]
+a<-mean(fd$ACCOMODATION, na.rm = TRUE)
+
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Cultural Event"),]
+c<-mean(fd$FOOD.AND.DRINKS, na.rm = TRUE)
+c
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Cultural Event"),]
+d<-mean(fd$ROAD.TRANSPORT, na.rm = TRUE)
+d
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Cultural Event"),]
+e<-mean(fd$AIR.TRANSPORT, na.rm = TRUE)
+e
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Cultural Event"),]
+f<-mean(fd$RAIL.TRANSPORT, na.rm = TRUE)
+f
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Cultural Event"),]
+g<-mean(fd$WATER.TRANSPORT, na.rm = TRUE)
+g
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Cultural Event"),]
+h<-mean(fd$RECREATION.AND.AMUSEMENTS, na.rm = TRUE)
+h
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Cultural Event"),]
+i<-mean(fd$HANDICRAFTS, na.rm = TRUE)
+i
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Cultural Event"),]
+j<-mean(fd$SIGHTSEEING, na.rm = TRUE)
+j
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Cultural Event"),]
+k<-mean(fd$MEDICAL, na.rm = TRUE)
+k
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Cultural Event"),]
+l<-mean(fd$OTHERS, na.rm = TRUE)
+l
+m<-sum(a,c,d,e,f,g,h,i,j,k,l)
+m
+D<-c(a,c,d,e,f,g,h,i,j,k,l,m)
+D
+d<-round(D,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+
+```{r}
+##Mean Expenditure by Purpose of Visit and Item, December 2017
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Sport Event"),]
+a<-mean(fd$ACCOMODATION, na.rm = TRUE)
+
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Sport Event"),]
+c<-mean(fd$FOOD.AND.DRINKS, na.rm = TRUE)
+c
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Sport Event"),]
+d<-mean(fd$ROAD.TRANSPORT, na.rm = TRUE)
+d
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Sport Event"),]
+e<-mean(fd$AIR.TRANSPORT, na.rm = TRUE)
+e
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Sport Event"),]
+f<-mean(fd$RAIL.TRANSPORT, na.rm = TRUE)
+f
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Sport Event"),]
+g<-mean(fd$WATER.TRANSPORT, na.rm = TRUE)
+g
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Sport Event"),]
+h<-mean(fd$RECREATION.AND.AMUSEMENTS, na.rm = TRUE)
+h
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Sport Event"),]
+i<-mean(fd$HANDICRAFTS, na.rm = TRUE)
+i
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Sport Event"),]
+j<-mean(fd$SIGHTSEEING, na.rm = TRUE)
+j
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Sport Event"),]
+k<-mean(fd$MEDICAL, na.rm = TRUE)
+k
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Sport Event"),]
+l<-mean(fd$OTHERS, na.rm = TRUE)
+l
+m<-sum(a,c,d,e,f,g,h,i,j,k,l)
+m
+D<-c(a,c,d,e,f,g,h,i,j,k,l,m)
+D
+d<-round(D,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+
+```{r}
+##Mean Expenditure by Purpose of Visit and Item, December 2017
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Second Residence"),]
+a<-mean(fd$ACCOMODATION, na.rm = TRUE)
+
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Second Residence"),]
+c<-mean(fd$FOOD.AND.DRINKS, na.rm = TRUE)
+c
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Second Residence"),]
+d<-mean(fd$ROAD.TRANSPORT, na.rm = TRUE)
+d
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Second Residence"),]
+e<-mean(fd$AIR.TRANSPORT, na.rm = TRUE)
+e
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Second Residence"),]
+f<-mean(fd$RAIL.TRANSPORT, na.rm = TRUE)
+f
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Second Residence"),]
+g<-mean(fd$WATER.TRANSPORT, na.rm = TRUE)
+g
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Second Residence"),]
+h<-mean(fd$RECREATION.AND.AMUSEMENTS, na.rm = TRUE)
+h
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Second Residence"),]
+i<-mean(fd$HANDICRAFTS, na.rm = TRUE)
+i
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Second Residence"),]
+j<-mean(fd$SIGHTSEEING, na.rm = TRUE)
+j
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Second Residence"),]
+k<-mean(fd$MEDICAL, na.rm = TRUE)
+k
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Second Residence"),]
+l<-mean(fd$OTHERS, na.rm = TRUE)
+l
+m<-sum(a,c,d,e,f,g,h,i,j,k,l)
+m
+D<-c(a,c,d,e,f,g,h,i,j,k,l,m)
+D
+d<-round(D,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+
+```{r}
+##Mean Expenditure by Purpose of Visit and Item, December 2017
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Visiting Relatives/Friends"),]
+a<-mean(fd$ACCOMODATION, na.rm = TRUE)
+
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Visiting Relatives/Friends"),]
+c<-mean(fd$FOOD.AND.DRINKS, na.rm = TRUE)
+c
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Visiting Relatives/Friends"),]
+d<-mean(fd$ROAD.TRANSPORT, na.rm = TRUE)
+d
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Visiting Relatives/Friends"),]
+e<-mean(fd$AIR.TRANSPORT, na.rm = TRUE)
+e
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Visiting Relatives/Friends"),]
+f<-mean(fd$RAIL.TRANSPORT, na.rm = TRUE)
+f
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Visiting Relatives/Friends"),]
+g<-mean(fd$WATER.TRANSPORT, na.rm = TRUE)
+g
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Visiting Relatives/Friends"),]
+h<-mean(fd$RECREATION.AND.AMUSEMENTS, na.rm = TRUE)
+h
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Visiting Relatives/Friends"),]
+i<-mean(fd$HANDICRAFTS, na.rm = TRUE)
+i
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Visiting Relatives/Friends"),]
+j<-mean(fd$SIGHTSEEING, na.rm = TRUE)
+j
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Visiting Relatives/Friends"),]
+k<-mean(fd$MEDICAL, na.rm = TRUE)
+k
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Visiting Relatives/Friends"),]
+l<-mean(fd$OTHERS, na.rm = TRUE)
+l
+m<-sum(a,c,d,e,f,g,h,i,j,k,l)
+m
+D<-c(a,c,d,e,f,g,h,i,j,k,l,m)
+D
+d<-round(D,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+
+```{r}
+##Mean Expenditure by Purpose of Visit and Item, December 2017
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Health/Treatment"  ),]
+a<-mean(fd$ACCOMODATION, na.rm = TRUE)
+
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Health/Treatment"  ),]
+c<-mean(fd$FOOD.AND.DRINKS, na.rm = TRUE)
+c
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Health/Treatment"  ),]
+d<-mean(fd$ROAD.TRANSPORT, na.rm = TRUE)
+d
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Health/Treatment"  ),]
+e<-mean(fd$AIR.TRANSPORT, na.rm = TRUE)
+e
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Health/Treatment"  ),]
+f<-mean(fd$RAIL.TRANSPORT, na.rm = TRUE)
+f
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Health/Treatment"  ),]
+g<-mean(fd$WATER.TRANSPORT, na.rm = TRUE)
+g
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Health/Treatment"  ),]
+h<-mean(fd$RECREATION.AND.AMUSEMENTS, na.rm = TRUE)
+h
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Health/Treatment"  ),]
+i<-mean(fd$HANDICRAFTS, na.rm = TRUE)
+i
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Health/Treatment"  ),]
+j<-mean(fd$SIGHTSEEING, na.rm = TRUE)
+j
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Health/Treatment"  ),]
+k<-mean(fd$MEDICAL, na.rm = TRUE)
+k
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Health/Treatment"  ),]
+l<-mean(fd$OTHERS, na.rm = TRUE)
+l
+m<-sum(a,c,d,e,f,g,h,i,j,k,l)
+m
+D<-c(a,c,d,e,f,g,h,i,j,k,l,m)
+D
+d<-round(D,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+
+```{r}
+##Mean Expenditure by Purpose of Visit and Item, December 2017
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Religion/Pilgrimage"),]
+a<-mean(fd$ACCOMODATION, na.rm = TRUE)
+
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Religion/Pilgrimage"),]
+c<-mean(fd$FOOD.AND.DRINKS, na.rm = TRUE)
+#c
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Religion/Pilgrimage"),]
+d<-mean(fd$ROAD.TRANSPORT, na.rm = TRUE)
+#d
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Religion/Pilgrimage"),]
+e<-mean(fd$AIR.TRANSPORT, na.rm = TRUE)
+#e
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Religion/Pilgrimage"),]
+f<-mean(fd$RAIL.TRANSPORT, na.rm = TRUE)
+#f
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Religion/Pilgrimage"),]
+g<-mean(fd$WATER.TRANSPORT, na.rm = TRUE)
+#g
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Religion/Pilgrimage"),]
+h<-mean(fd$RECREATION.AND.AMUSEMENTS, na.rm = TRUE)
+#h
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Religion/Pilgrimage"),]
+i<-mean(fd$HANDICRAFTS, na.rm = TRUE)
+i
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Religion/Pilgrimage"),]
+j<-mean(fd$SIGHTSEEING, na.rm = TRUE)
+j
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Religion/Pilgrimage"),]
+k<-mean(fd$MEDICAL, na.rm = TRUE)
+k
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Religion/Pilgrimage"),]
+l<-mean(fd$OTHERS, na.rm = TRUE)
+l
+m<-sum(a,c,d,e,f,g,h,i,j,k,l)
+m
+D<-c(a,c,d,e,f,g,h,i,j,k,l,m)
+D
+d<-round(D,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+
+```{r}
+##Mean Expenditure by Purpose of Visit and Item, December 2017
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Others (reasons)"),]
+a<-mean(fd$ACCOMODATION, na.rm = TRUE)
+
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Others (reasons)"),]
+c<-mean(fd$FOOD.AND.DRINKS, na.rm = TRUE)
+c
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Others (reasons)"),]
+d<-mean(fd$ROAD.TRANSPORT, na.rm = TRUE)
+d
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Others (reasons)"),]
+e<-mean(fd$AIR.TRANSPORT, na.rm = TRUE)
+e
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Others (reasons)"),]
+f<-mean(fd$RAIL.TRANSPORT, na.rm = TRUE)
+f
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Others (reasons)"),]
+g<-mean(fd$WATER.TRANSPORT, na.rm = TRUE)
+g
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Others (reasons)"),]
+h<-mean(fd$RECREATION.AND.AMUSEMENTS, na.rm = TRUE)
+h
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Others (reasons)"),]
+i<-mean(fd$HANDICRAFTS, na.rm = TRUE)
+i
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Others (reasons)"),]
+j<-mean(fd$SIGHTSEEING, na.rm = TRUE)
+j
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Others (reasons)"),]
+k<-mean(fd$MEDICAL, na.rm = TRUE)
+k
+fd<-data17[which(MAIN.PURPOSE.FOR.YOUR.VISIT=="Others (reasons)"),]
+l<-mean(fd$OTHERS, na.rm = TRUE)
+l
+m<-sum(a,c,d,e,f,g,h,i,j,k,l)
+m
+D<-c(a,c,d,e,f,g,h,i,j,k,l,m)
+D
+d<-round(D,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+#use of credit cards
+DID.YOU.USE.A.CREDIT.CARD
+tcr<-table(DID.YOU.USE.A.CREDIT.CARD)
+ff<-cbind(tcr, prop.table(tcr)*100)
+ff
+f<-addmargins(ff,1)
+f
+d<-round(f,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
+```{r}
+#""CARD.AMERICAN"                    "CARD.VISA"                        "CARD.MASTER"                      "CARD.OTHERS"
+#levels(DID.YOU.USE.A.CREDIT.CARD)"Yes (go to Q18b)" "No" 
+dat<-data17[which(DID.YOU.USE.A.CREDIT.CARD=="Yes (go to Q18b)"),]
+dat$DID.YOU.USE.A.CREDIT.CARD
+f<-table(dat$CARD.AMERICAN)
+f1<-cbind(f, prop.table(f)*100)
+f2<-round(f1,2)
+f2
+
+f<-table(dat$CARD.VISA)
+f1<-cbind(f, prop.table(f)*100)
+f2<-round(f1,2)
+f2
+
+f<-table(dat$CARD.MASTER)
+f1<-cbind(f, prop.table(f)*100)
+f2<-round(f1,2)
+f2
+
+f<-table(dat$CARD.OTHERS)
+f1<-cbind(f, prop.table(f)*100)
+f2<-round(f1,2)
+f2
+```
+```{r}
+HOW.LIKELY.VISIT.KENYA
+
+f<-table(HOW.LIKELY.VISIT.KENYA)
+f1<-cbind(f, prop.table(f)*100)
+d<-round(f1,2)
+d
+results_clipboard <- function(d, sep="\t", dec=".", max.size=(200*1000))   # Copy a data.frame to clipboard
+{
+    write.table(d, paste0("clipboard-", formatC(max.size, format="f", digits=0)), sep=sep, row.names=TRUE, dec=dec)
+}
+results_clipboard(d) ###then paste in excel
+```
